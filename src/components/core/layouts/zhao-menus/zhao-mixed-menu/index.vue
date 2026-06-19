@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <a-menu
     mode="horizontal"
     :selected-keys="selectedKeys"
@@ -6,7 +6,7 @@
     class="bg-transparent border-0"
   >
     <template v-for="item in firstLevelMenus" :key="item.path">
-      <a-menu-item :key="item.path">
+      <a-menu-item>
         <template #icon>
           <ZhaoIcon v-if="item.meta?.icon" :icon="item.meta.icon" />
         </template>
@@ -21,6 +21,7 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import type { AppRouteRecord } from '@/types/router'
+import ZhaoIcon from '@/components/icons/ZhaoIcon.vue'
 
 defineOptions({ name: 'ZhaoMixedMenu' })
 

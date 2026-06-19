@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 配置类型定义模块
  *
  * 提供系统配置相关的类型定义
@@ -25,7 +25,7 @@
  */
 
 import { MenuTypeEnum, SystemThemeEnum } from '@/enums/appEnum'
-import type { MenuThemeType, SystemThemeTypes } from '@/types/store'
+import type { MenuThemeType, SystemThemeTypes } from '@/types/store/index'
 
 // 主题设置
 export interface ThemeSetting {

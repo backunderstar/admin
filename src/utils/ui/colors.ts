@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 颜色处理工具模块
  *
  * 提供完整的颜色格式转换和处理功能
@@ -8,7 +8,7 @@
  * - Hex 与 RGB/RGBA 格式互转
  * - 颜色混合计算
  * - 颜色变浅/变深处理
- * - Element Plus 主题色自动生成
+ * - Arco Design 主题色自动生成
  * - 颜色格式验证
  * - CSS 变量读取
  * - 暗黑模式颜色适配
@@ -16,7 +16,7 @@
  * ## 使用场景
  *
  * - 主题色动态切换
- * - Element Plus 组件主题定制
+ * - Arco Design 组件主题定制
  * - 颜色渐变生成
  * - 明暗主题颜色计算
  * - 颜色格式标准化
@@ -29,8 +29,8 @@
  * - colourBlend: 两种颜色混合
  * - getLightColor: 生成变浅的颜色
  * - getDarkColor: 生成变深的颜色
- * - handleElementThemeColor: 处理 Element Plus 主题色
- * - setElementThemeColor: 设置完整的主题色系统
+ * - handleArcoThemeColor: 处理 Element Plus 主题色
+ * - setArcoThemeColor: 设置完整的主题色系统
  *
  * ## 支持格式
  *
@@ -41,6 +41,7 @@
  * @module utils/ui/colors
  * @author Zhao
  */
+import { Message } from '@arco-design/web-vue'
 import { useSettingStore } from '@/store/modules/setting'
 
 /**
@@ -125,7 +126,7 @@ export function hexToRgba(hex: string, opacity: number): RgbaResult {
  */
 export function hexToRgb(hexColor: string): number[] {
   if (!isValidHexColor(hexColor)) {
-    ElMessage.warning('输入错误的hex颜色值')
+    Message.warning('输入错误的hex颜色值')
     throw new Error('Invalid hex color format')
   }
 
@@ -157,7 +158,7 @@ export function hexToRgb(hexColor: string): number[] {
  */
 export function rgbToHex(r: number, g: number, b: number): string {
   if (!isValidRgbValue(r, g, b)) {
-    ElMessage.warning('输入错误的RGB颜色值')
+    Message.warning('输入错误的RGB颜色值')
     throw new Error('Invalid RGB color values')
   }
 
@@ -199,7 +200,7 @@ export function colourBlend(color1: string, color2: string, ratio: number): stri
  */
 export function getLightColor(color: string, level: number, isDark: boolean = false): string {
   if (!isValidHexColor(color)) {
-    ElMessage.warning('输入错误的hex颜色值')
+    Message.warning('输入错误的hex颜色值')
     throw new Error('Invalid hex color format')
   }
 
@@ -221,7 +222,7 @@ export function getLightColor(color: string, level: number, isDark: boolean = fa
  */
 export function getDarkColor(color: string, level: number): string {
   if (!isValidHexColor(color)) {
-    ElMessage.warning('输入错误的hex颜色值')
+    Message.warning('输入错误的hex颜色值')
     throw new Error('Invalid hex color format')
   }
 
@@ -232,42 +233,42 @@ export function getDarkColor(color: string, level: number): string {
 }
 
 /**
- * 处理 Element Plus 主题颜色
+ * 处理 Arco Design 主题颜色
  * @param theme 主题颜色
  * @param isDark 是否为暗色主题
  */
-export function handleElementThemeColor(theme: string, isDark: boolean = false): void {
-  document.documentElement.style.setProperty('--el-color-primary', theme)
+export function handleArcoThemeColor(theme: string, isDark: boolean = false): void {
+  document.documentElement.style.setProperty('--color-primary-6', theme)
 
   for (let i = 1; i <= 9; i++) {
     document.documentElement.style.setProperty(
-      `--el-color-primary-light-${i}`,
+      `--color-primary-light-${i}`,
       getLightColor(theme, i / 10, isDark),
     )
   }
 
   for (let i = 1; i <= 9; i++) {
     document.documentElement.style.setProperty(
-      `--el-color-primary-dark-${i}`,
+      `--color-primary-dark-${i}`,
       getDarkColor(theme, i / 10),
     )
   }
 }
 
 /**
- * 设置 Element Plus 主题颜色
+ * 设置 Arco Design 主题颜色
  * @param color 主题颜色
  */
-export function setElementThemeColor(color: string): void {
+export function setArcoThemeColor(color: string): void {
   const mixColor = '#ffffff'
   const elStyle = document.documentElement.style
 
-  elStyle.setProperty('--el-color-primary', color)
-  handleElementThemeColor(color, useSettingStore().isDark)
+  elStyle.setProperty('--color-primary-6', color)
+  handleArcoThemeColor(color, useSettingStore().isDark)
 
   // 生成更淡一点的颜色
   for (let i = 1; i < 16; i++) {
     const itemColor = colourBlend(color, mixColor, i / 16)
-    elStyle.setProperty(`--el-color-primary-custom-${i}`, itemColor)
+    elStyle.setProperty(`--color-primary-custom-${i}`, itemColor)
   }
 }

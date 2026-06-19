@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div
     v-if="worktabStore.hasOpenedTabs"
     class="flex items-center border-b border-[var(--color-border)] bg-[var(--color-bg-2)] overflow-hidden"
@@ -84,6 +84,7 @@ import { useI18n } from 'vue-i18n'
 import { useWorktabStore } from '@/store/modules/worktab'
 import { useCommon } from '@/hooks/core/useCommon'
 import type { WorkTab } from '@/types'
+import ZhaoIcon from '@/components/icons/ZhaoIcon.vue'
 
 defineOptions({ name: 'ZhaoWorkTab' })
 

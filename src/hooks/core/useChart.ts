@@ -1,4 +1,4 @@
-/**
+﻿/**
  * useChart - ECharts 图表管理
  *
  * 提供完整的 ECharts 图表生命周期管理和配置能力，简化图表开发流程。
@@ -64,10 +64,10 @@ export const useChartOps = (): ChartThemeConfig => ({
   /** 字体颜色 */
   fontColor: '#999',
   /** 主题颜色 */
-  themeColor: getCssVar('--el-color-primary-light-1'),
+  themeColor: getCssVar('--color-primary-light-1'),
   /** 颜色组 */
   colors: [
-    getCssVar('--el-color-primary-light-1'),
+    getCssVar('--color-primary-light-1'),
     '#4ABEFF',
     '#EDF2FF',
     '#14DEBA',

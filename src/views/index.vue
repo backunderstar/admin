@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="flex h-screen w-full overflow-hidden bg-[var(--color-bg-1)]">
     <!-- ═══════════════════════════════════════════
        侧边栏
@@ -24,20 +24,24 @@
               <ZhaoIcon icon="ri:admin-line" class="text-white text-lg" />
             </div>
             <div class="flex-1 w-full mt-3 space-y-1 overflow-y-auto scrollbar-none">
-              <div
+              <a-tooltip
                 v-for="item in topLevelMenus"
                 :key="item.path"
-                v-tooltip="item.meta?.title ? $t(item.meta.title) : ''"
-                class="flex flex-col items-center py-2.5 mx-1.5 rounded-lg cursor-pointer transition-colors"
-                :class="
-                  activeFirstLevel === item.path
-                    ? 'text-[var(--color-primary-light-4)] bg-[var(--color-fill-2)]'
-                    : 'text-[var(--color-text-3)] hover:text-[var(--color-text-2)] hover:bg-[var(--color-fill-1)]'
-                "
-                @click="setActiveFirstLevel(item)"
+                :content="item.meta?.title ? $t(item.meta.title) : ''"
+                placement="right"
               >
-                <ZhaoIcon :icon="item.meta?.icon || 'ri:folder-line'" class="text-xl" />
-              </div>
+                <div
+                  class="flex flex-col items-center py-2.5 mx-1.5 rounded-lg cursor-pointer transition-colors"
+                  :class="
+                    activeFirstLevel === item.path
+                      ? 'text-[var(--color-primary-light-4)] bg-[var(--color-fill-2)]'
+                      : 'text-[var(--color-text-3)] hover:text-[var(--color-text-2)] hover:bg-[var(--color-fill-1)]'
+                  "
+                  @click="setActiveFirstLevel(item)"
+                >
+                  <ZhaoIcon :icon="item.meta?.icon || 'ri:folder-line'" class="text-xl" />
+                </div>
+              </a-tooltip>
             </div>
           </div>
           <!-- 右栏：子菜单 -->
@@ -165,6 +169,7 @@ import ZhaoHeaderBar from '@/components/core/layouts/zhao-header-bar/index.vue'
 import ZhaoPageContent from '@/components/core/layouts/zhao-page-content/index.vue'
 import ZhaoGlobalComponent from '@/components/core/layouts/zhao-global-component/index.vue'
 import type { AppRouteRecord } from '@/types/router'
+import ZhaoIcon from '@/components/icons/ZhaoIcon.vue'
 
 defineOptions({ name: 'AppLayout' })
 

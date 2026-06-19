@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="fixed bottom-6 right-6 z-50 cursor-pointer" @click="showPanel = !showPanel">
     <div
       class="w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-105"
@@ -39,6 +39,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import ZhaoIcon from '@/components/icons/ZhaoIcon.vue'
 
 defineOptions({ name: 'ZhaoChatWindow' })
 

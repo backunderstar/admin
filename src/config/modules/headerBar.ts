@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 顶部栏功能配置
  *
  * 统一管理顶部栏各个功能模块的启用状态。
@@ -8,7 +8,7 @@
  * @author Zhao
  */
 
-import type { HeaderBarFeatureConfig } from '@/types'
+import type { HeaderBarFeatureConfig } from '@/types/config/index'
 
 /**
  * 顶部栏功能配置对象

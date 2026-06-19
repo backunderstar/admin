@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 存储兼容性管理模块
  *
  * 提供完整的本地存储兼容性检查和数据验证功能
@@ -32,6 +32,7 @@
  * @module utils/storage/storage
  * @author Zhao
  */
+import { Message } from '@arco-design/web-vue'
 import { router } from '@/router'
 import { useUserStore } from '@/store/modules/user'
 import { StorageConfig } from '@/utils/storage/storage-config'
@@ -97,7 +98,7 @@ class StorageCompatibilityManager {
    * 显示存储错误消息
    */
   private showStorageError(): void {
-    ElMessage({
+    Message({
       type: 'error',
       offset: 40,
       duration: 5000,

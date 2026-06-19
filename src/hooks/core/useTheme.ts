@@ -1,4 +1,4 @@
-/**
+﻿/**
  * useTheme - 系统主题管理
  *
  * 提供完整的主题切换和管理功能，支持亮色、暗色和自动模式。
@@ -35,7 +35,7 @@ import { useSettingStore } from '@/store/modules/setting'
 import { SystemThemeEnum } from '@/enums/appEnum'
 import AppConfig from '@/config'
 import { SystemThemeTypes } from '@/types/store'
-import { getDarkColor, getLightColor, setElementThemeColor } from '@/utils/ui'
+import { getDarkColor, getLightColor, setArcoThemeColor } from '@/utils/ui'
 import { usePreferredDark } from '@vueuse/core'
 import { watch } from 'vue'
 
@@ -81,7 +81,7 @@ export function useTheme() {
 
     for (let i = 1; i <= 9; i++) {
       document.documentElement.style.setProperty(
-        `--el-color-primary-light-${i}`,
+        `--color-primary-light-${i}`,
         isDark ? `${getDarkColor(primary, i / 10)}` : `${getLightColor(primary, i / 10)}`,
       )
     }
@@ -149,7 +149,7 @@ export function initializeTheme() {
     }
 
     // 设置主题颜色
-    setElementThemeColor(settingStore.systemThemeColor)
+    setArcoThemeColor(settingStore.systemThemeColor)
 
     // 设置圆角
     document.documentElement.style.setProperty('--custom-radius', `${settingStore.customRadius}rem`)

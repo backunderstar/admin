@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <!-- 有子菜单：渲染 a-sub-menu -->
   <a-sub-menu v-if="item.children?.length" :key="item.path" :title="t(item.meta?.title || '')">
     <template #icon>
@@ -20,6 +20,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import type { AppRouteRecord } from '@/types/router'
+import ZhaoIcon from '@/components/icons/ZhaoIcon.vue'
 
 defineProps<{
   item: AppRouteRecord

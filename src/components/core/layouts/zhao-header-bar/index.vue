@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div
     class="flex items-center justify-between h-full px-4 border-b border-[var(--color-border)]"
     :style="{ background: 'var(--color-bg-2)' }"
@@ -164,6 +164,7 @@ import { MenuTypeEnum, LanguageEnum, SystemThemeEnum } from '@/enums/appEnum'
 import { Message, Modal } from '@arco-design/web-vue'
 import mittBus from '@/utils/mitt'
 import type { AppRouteRecord } from '@/types/router'
+import ZhaoIcon from '@/components/icons/ZhaoIcon.vue'
 
 defineOptions({ name: 'ZhaoHeaderBar' })
 

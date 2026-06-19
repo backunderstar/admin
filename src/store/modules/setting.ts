@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 系统设置状态管理模块
  *
  * 提供完整的系统设置状态管理
@@ -35,7 +35,7 @@ import { ref, computed } from 'vue'
 import type { MenuThemeType } from '@/types/store'
 import AppConfig from '@/config'
 import { SystemThemeEnum, MenuThemeEnum, MenuTypeEnum, ContainerWidthEnum } from '@/enums/appEnum'
-import { setElementThemeColor } from '@/utils/ui'
+import { setArcoThemeColor } from '@/utils/ui'
 import { useCeremony } from '@/hooks/core/useCeremony'
 import { StorageConfig } from '@/utils'
 import { SETTING_DEFAULT_CONFIG } from '@/config/setting'
@@ -200,9 +200,9 @@ export const useSettingStore = defineStore(
      * 设置Element Plus主题颜色
      * @param theme 主题颜色
      */
-    const setElementTheme = (theme: string) => {
+    const setThemeColor = (theme: string) => {
       systemThemeColor.value = theme
-      setElementThemeColor(theme)
+      setArcoThemeColor(theme)
     }
 
     /**
@@ -416,7 +416,7 @@ export const useSettingStore = defineStore(
       setMenuOpenWidth,
       setGlopTheme,
       switchMenuStyles,
-      setElementTheme,
+      setThemeColor,
       setBorderMode,
       setContainerWidth,
       setUniqueOpened,

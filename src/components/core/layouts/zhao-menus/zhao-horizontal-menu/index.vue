@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <a-menu
     mode="horizontal"
     :selected-keys="selectedKeys"
@@ -32,6 +32,7 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import type { AppRouteRecord } from '@/types/router'
+import ZhaoIcon from '@/components/icons/ZhaoIcon.vue'
 
 defineOptions({ name: 'ZhaoHorizontalMenu' })
 

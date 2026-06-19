@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <a-modal
     :visible="visible"
     :footer="false"
@@ -76,6 +76,7 @@ import { useI18n } from 'vue-i18n'
 import { useMenuStore } from '@/store/modules/menu'
 import mittBus from '@/utils/mitt'
 import type { AppRouteRecord } from '@/types/router'
+import ZhaoIcon from '@/components/icons/ZhaoIcon.vue'
 
 defineOptions({ name: 'ZhaoGlobalSearch' })
 

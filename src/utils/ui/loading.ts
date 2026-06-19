@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 全局 Loading 加载管理模块
  *
  * 提供统一的全屏加载动画管理（自定义 DOM 实现，无第三方依赖）
@@ -27,7 +27,7 @@ const getLoadingBackground = (): string => {
 /** 获取系统主题色 */
 const getThemeColor = (): string => {
   const style = getComputedStyle(document.documentElement)
-  return style.getPropertyValue('--arcoblue-6').trim() || '#5D87FF'
+  return style.getPropertyValue('--color-primary-6').trim() || '#5D87FF'
 }
 
 /** 创建全屏 loading 遮罩层 */

@@ -7,7 +7,7 @@
 export {}
 declare global {
   const EffectScope: (typeof import('vue'))['EffectScope']
-    const acceptHMRUpdate: (typeof import('pinia'))['acceptHMRUpdate']
+  const acceptHMRUpdate: (typeof import('pinia'))['acceptHMRUpdate']
   const asyncComputed: (typeof import('@vueuse/core'))['asyncComputed']
   const autoResetRef: (typeof import('@vueuse/core'))['autoResetRef']
   const computed: (typeof import('vue'))['computed']

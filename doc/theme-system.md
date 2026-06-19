@@ -103,7 +103,7 @@ export function useTheme() {
 
     // ② 设置 html 标签的 class
     const currentTheme = AppConfig.systemThemeStyles[theme]
-    el.setAttribute('class', currentTheme.className)  // '' 或 'dark'
+    el.setAttribute('class', currentTheme.className) // '' 或 'dark'
 
     // ③ 生成主题色的 9 级明暗变体
     const primary = settingStore.systemThemeColor
@@ -159,13 +159,13 @@ export function colourBlend(color1: string, color2: string, ratio: number): stri
 
 ### 系统预设变量
 
-| CSS 变量 | 来源 | 用途 |
-|----------|------|------|
-| `--color-primary-6` | `setArcoThemeColor()` | Element Plus 主色 |
-| `--color-primary-6-light-{1..9}` | `setArcoThemeColor()` | Element Plus 主色浅色变体 |
-| `--color-primary-6-dark-{1..9}` | `handleElementThemeColor()` | Element Plus 主色深色变体 |
-| `--color-primary-6-custom-{1..15}` | `setArcoThemeColor()` | 更细腻的浅色渐变 |
-| `--custom-radius` | `setCustomRadius()` | 全局圆角大小 |
+| CSS 变量                           | 来源                        | 用途                      |
+| ---------------------------------- | --------------------------- | ------------------------- |
+| `--color-primary-6`                | `setArcoThemeColor()`       | Element Plus 主色         |
+| `--color-primary-6-light-{1..9}`   | `setArcoThemeColor()`       | Element Plus 主色浅色变体 |
+| `--color-primary-6-dark-{1..9}`    | `handleElementThemeColor()` | Element Plus 主色深色变体 |
+| `--color-primary-6-custom-{1..15}` | `setArcoThemeColor()`       | 更细腻的浅色渐变          |
+| `--custom-radius`                  | `setCustomRadius()`         | 全局圆角大小              |
 
 ### 暗色主题切换
 
@@ -221,7 +221,7 @@ themeList: [
 const getMenuTheme = computed((): MenuThemeType => {
   const theme = AppConfig.themeList.find((item) => item.theme === menuThemeType.value)
   if (isDark.value) {
-    return AppConfig.darkMenuStyles[0]  // 暗色模式下强制使用暗色菜单
+    return AppConfig.darkMenuStyles[0] // 暗色模式下强制使用暗色菜单
   }
   return theme
 })
@@ -239,14 +239,14 @@ const getMenuTheme = computed((): MenuThemeType => {
 
 ```typescript
 export const SETTING_DEFAULT_CONFIG = {
-  menuType: MenuTypeEnum.LEFT,        // 左侧菜单
-  menuOpenWidth: 230,                  // 菜单宽度
+  menuType: MenuTypeEnum.LEFT, // 左侧菜单
+  menuOpenWidth: 230, // 菜单宽度
   systemThemeType: SystemThemeEnum.AUTO, // 自动主题
-  menuThemeType: MenuThemeEnum.DESIGN,   // 设计风格菜单
-  systemThemeColor: '#5D87FF',           // 默认主色
-  showCrumbs: true,                      // 显示面包屑
-  showWorkTab: true,                     // 显示标签页
-  customRadius: '0.75',                  // 圆角大小（rem）
+  menuThemeType: MenuThemeEnum.DESIGN, // 设计风格菜单
+  systemThemeColor: '#5D87FF', // 默认主色
+  showCrumbs: true, // 显示面包屑
+  showWorkTab: true, // 显示标签页
+  customRadius: '0.75', // 圆角大小（rem）
   containerWidth: ContainerWidthEnum.FULL, // 全屏宽度
   // ... 更多配置
 }
@@ -273,7 +273,7 @@ export const useSettingStore = defineStore(
     // Actions
     const setElementTheme = (theme: string) => {
       systemThemeColor.value = theme
-      setArcoThemeColor(theme)  // 同步更新 CSS 变量
+      setArcoThemeColor(theme) // 同步更新 CSS 变量
     }
     const setCustomRadius = (radius: string) => {
       customRadius.value = radius
@@ -306,59 +306,59 @@ export const useSettingStore = defineStore(
 
 ### 布局相关
 
-| 配置项 | 类型 | 默认值 | 说明 |
-|--------|------|--------|------|
-| `menuType` | `MenuTypeEnum` | `LEFT` | 左侧/顶部/混合/双栏 |
-| `menuOpenWidth` | `number` | `230` | 菜单展开宽度(px) |
-| `menuOpen` | `boolean` | `true` | 菜单是否展开 |
-| `dualMenuShowText` | `boolean` | `false` | 双栏菜单是否显示文字 |
-| `containerWidth` | `ContainerWidthEnum` | `FULL` | 容器宽度(全屏/固定) |
+| 配置项             | 类型                 | 默认值  | 说明                 |
+| ------------------ | -------------------- | ------- | -------------------- |
+| `menuType`         | `MenuTypeEnum`       | `LEFT`  | 左侧/顶部/混合/双栏  |
+| `menuOpenWidth`    | `number`             | `230`   | 菜单展开宽度(px)     |
+| `menuOpen`         | `boolean`            | `true`  | 菜单是否展开         |
+| `dualMenuShowText` | `boolean`            | `false` | 双栏菜单是否显示文字 |
+| `containerWidth`   | `ContainerWidthEnum` | `FULL`  | 容器宽度(全屏/固定)  |
 
 ### 主题相关
 
-| 配置项 | 类型 | 默认值 | 说明 |
-|--------|------|--------|------|
-| `systemThemeType` | `SystemThemeEnum` | `AUTO` | 亮色/暗色/自动 |
-| `systemThemeColor` | `string` | `#5D87FF` | 系统主色 |
-| `menuThemeType` | `MenuThemeEnum` | `DESIGN` | 菜单主题风格 |
+| 配置项             | 类型              | 默认值    | 说明           |
+| ------------------ | ----------------- | --------- | -------------- |
+| `systemThemeType`  | `SystemThemeEnum` | `AUTO`    | 亮色/暗色/自动 |
+| `systemThemeColor` | `string`          | `#5D87FF` | 系统主色       |
+| `menuThemeType`    | `MenuThemeEnum`   | `DESIGN`  | 菜单主题风格   |
 
 ### 界面显示
 
-| 配置项 | 类型 | 默认值 | 说明 |
-|--------|------|--------|------|
-| `showCrumbs` | `boolean` | `true` | 面包屑 |
-| `showWorkTab` | `boolean` | `true` | 标签页 |
-| `showLanguage` | `boolean` | `true` | 语言切换 |
-| `showNprogress` | `boolean` | `false` | 顶部进度条 |
-| `watermarkVisible` | `boolean` | `false` | 水印 |
+| 配置项             | 类型      | 默认值  | 说明       |
+| ------------------ | --------- | ------- | ---------- |
+| `showCrumbs`       | `boolean` | `true`  | 面包屑     |
+| `showWorkTab`      | `boolean` | `true`  | 标签页     |
+| `showLanguage`     | `boolean` | `true`  | 语言切换   |
+| `showNprogress`    | `boolean` | `false` | 顶部进度条 |
+| `watermarkVisible` | `boolean` | `false` | 水印       |
 
 ### 功能开关
 
-| 配置项 | 类型 | 默认值 | 说明 |
-|--------|------|--------|------|
-| `uniqueOpened` | `boolean` | `true` | 手风琴菜单 |
-| `colorWeak` | `boolean` | `false` | 色弱模式 |
-| `boxBorderMode` | `boolean` | `true` | 边框模式 |
+| 配置项          | 类型      | 默认值  | 说明       |
+| --------------- | --------- | ------- | ---------- |
+| `uniqueOpened`  | `boolean` | `true`  | 手风琴菜单 |
+| `colorWeak`     | `boolean` | `false` | 色弱模式   |
+| `boxBorderMode` | `boolean` | `true`  | 边框模式   |
 
 ### 样式细节
 
-| 配置项 | 类型 | 默认值 | 说明 |
-|--------|------|--------|------|
-| `customRadius` | `string` | `'0.75'` | 全局圆角(rem) |
-| `pageTransition` | `string` | `'slide-left'` | 页面过渡动画 |
-| `tabStyle` | `string` | `'tab-default'` | 标签页样式 |
+| 配置项           | 类型     | 默认值          | 说明          |
+| ---------------- | -------- | --------------- | ------------- |
+| `customRadius`   | `string` | `'0.75'`        | 全局圆角(rem) |
+| `pageTransition` | `string` | `'slide-left'`  | 页面过渡动画  |
+| `tabStyle`       | `string` | `'tab-default'` | 标签页样式    |
 
 ---
 
 ## 八、设计亮点总结
 
-| 设计 | 说明 |
-|------|------|
-| **CSS 变量驱动** | 所有主题色、圆角等通过 CSS 变量控制，无运行时 CSS-in-JS 开销 |
-| **明暗变体自动生成** | 主色输入后自动计算 9 级浅色 + 9 级深色 + 15 级自定义渐变 |
-| **过渡闪烁防护** | 切换主题时临时禁用所有 CSS transition，避免颜色突变时的闪烁 |
-| **AUTO 模式响应式** | 通过 `usePreferredDark()` 监听系统主题变化，自动跟随 |
-| **菜单主题独立** | 菜单主题与系统主题解耦，但暗色模式下强制使用暗色菜单 |
-| **持久化自动恢复** | Pinia persist 插件自动保存/恢复所有设置，刷新不丢失 |
-| **配置集中管理** | 默认值、类型定义、枚举、Store 分层清晰，修改一处即可 |
-| **Element Plus 适配** | 完整生成 Arco Design 的 `--color-primary-6-*` 变量体系 |
+| 设计                  | 说明                                                         |
+| --------------------- | ------------------------------------------------------------ |
+| **CSS 变量驱动**      | 所有主题色、圆角等通过 CSS 变量控制，无运行时 CSS-in-JS 开销 |
+| **明暗变体自动生成**  | 主色输入后自动计算 9 级浅色 + 9 级深色 + 15 级自定义渐变     |
+| **过渡闪烁防护**      | 切换主题时临时禁用所有 CSS transition，避免颜色突变时的闪烁  |
+| **AUTO 模式响应式**   | 通过 `usePreferredDark()` 监听系统主题变化，自动跟随         |
+| **菜单主题独立**      | 菜单主题与系统主题解耦，但暗色模式下强制使用暗色菜单         |
+| **持久化自动恢复**    | Pinia persist 插件自动保存/恢复所有设置，刷新不丢失          |
+| **配置集中管理**      | 默认值、类型定义、枚举、Store 分层清晰，修改一处即可         |
+| **Element Plus 适配** | 完整生成 Arco Design 的 `--color-primary-6-*` 变量体系       |

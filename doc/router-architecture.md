@@ -1,5 +1,4 @@
-﻿
----
+﻿---
 
 # 路由系统架构解析
 
@@ -46,7 +45,7 @@ src/router/
 // src/router/index.ts
 export const router = createRouter({
   history: createWebHistory(),
-  routes: staticRoutes,  // 只有登录页等公开路由
+  routes: staticRoutes, // 只有登录页等公开路由
 })
 ```
 
@@ -82,12 +81,12 @@ async function handleDynamicRoutes(to, router) {
 export const dashboardRoutes: AppRouteRecord = {
   path: '/dashboard',
   name: 'Dashboard',
-  component: '/index',  // ← 字符串！指向 Layout 组件
+  component: '/index', // ← 字符串！指向 Layout 组件
   children: [
     {
       path: 'console',
       name: 'Console',
-      component: '/dashboard/console',  // ← 字符串路径
+      component: '/dashboard/console', // ← 字符串路径
     },
   ],
 }
@@ -234,7 +233,7 @@ private async processBackendMenu() {
 
 ```typescript
 if (routeInitInProgress) {
-  return false  // 等待初始化完成
+  return false // 等待初始化完成
 }
 ```
 
@@ -271,11 +270,11 @@ const logOut = () => {
 // resetRouterState 内部
 export function resetRouterState(delay: number) {
   setTimeout(() => {
-    routeRegistry?.unregister()              // 移除所有动态路由
+    routeRegistry?.unregister() // 移除所有动态路由
     IframeRouteManager.getInstance().clear() // 清空 iframe 缓存
-    menuStore.removeAllDynamicRoutes()       // 执行所有移除函数
-    menuStore.setMenuList([])                // 清空菜单
-    resetRouteInitState()                    // 允许下次重新初始化
+    menuStore.removeAllDynamicRoutes() // 执行所有移除函数
+    menuStore.setMenuList([]) // 清空菜单
+    resetRouteInitState() // 允许下次重新初始化
   }, delay)
 }
 ```
@@ -292,20 +291,20 @@ export interface AppRouteRecord extends Omit<RouteRecordRaw, 'meta' | 'children'
   id?: number
   meta: RouteMeta
   children?: AppRouteRecord[]
-  component?: string | (() => Promise<any>)  // 支持字符串路径或函数
+  component?: string | (() => Promise<any>) // 支持字符串路径或函数
 }
 
 export interface RouteMeta {
-  title: string          // 菜单标题（支持 i18n key）
-  icon?: string          // 图标
-  roles?: string[]       // 角色权限
-  isHide?: boolean       // 菜单中隐藏
-  isHideTab?: boolean    // 标签页中隐藏
-  keepAlive?: boolean    // 是否缓存
-  link?: string          // 外部链接
-  isIframe?: boolean     // 是否 iframe 内嵌
-  fixedTab?: boolean     // 是否固定标签页
-  authList?: Array<{ title: string; authMark: string }>  // 按钮级权限
+  title: string // 菜单标题（支持 i18n key）
+  icon?: string // 图标
+  roles?: string[] // 角色权限
+  isHide?: boolean // 菜单中隐藏
+  isHideTab?: boolean // 标签页中隐藏
+  keepAlive?: boolean // 是否缓存
+  link?: string // 外部链接
+  isIframe?: boolean // 是否 iframe 内嵌
+  fixedTab?: boolean // 是否固定标签页
+  authList?: Array<{ title: string; authMark: string }> // 按钮级权限
 }
 ```
 
@@ -313,13 +312,13 @@ export interface RouteMeta {
 
 ## 九、设计亮点总结
 
-| 设计 | 说明 |
-|------|------|
-| **菜单即路由** | 菜单数据是唯一数据源，路由由菜单自动生成 |
-| **字符串组件路径** | 用路径字符串代替 `import()`，通过 `import.meta.glob` 自动映射 |
-| **双阶段注册** | 静态路由先行，动态路由登录后按权限注入 |
-| **前端/后端双模式** | 同一套架构支持前端角色过滤和后端 API 返回 |
-| **类封装核心逻辑** | 7 个职责单一的类，可测试、可替换 |
-| **递归路径规范化** | 自动将相对路径拼接为完整路径，支持无限嵌套 |
-| **守卫即编排器** | `beforeEach` 是完整的"路由初始化编排器" |
-| **防并发/防死循环** | 用 `routeInitInProgress` 和 `routeInitFailed` 做安全防护 |
+| 设计                | 说明                                                          |
+| ------------------- | ------------------------------------------------------------- |
+| **菜单即路由**      | 菜单数据是唯一数据源，路由由菜单自动生成                      |
+| **字符串组件路径**  | 用路径字符串代替 `import()`，通过 `import.meta.glob` 自动映射 |
+| **双阶段注册**      | 静态路由先行，动态路由登录后按权限注入                        |
+| **前端/后端双模式** | 同一套架构支持前端角色过滤和后端 API 返回                     |
+| **类封装核心逻辑**  | 7 个职责单一的类，可测试、可替换                              |
+| **递归路径规范化**  | 自动将相对路径拼接为完整路径，支持无限嵌套                    |
+| **守卫即编排器**    | `beforeEach` 是完整的"路由初始化编排器"                       |
+| **防并发/防死循环** | 用 `routeInitInProgress` 和 `routeInitFailed` 做安全防护      |

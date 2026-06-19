@@ -180,13 +180,13 @@ this.modules = import.meta.glob('../../views/**/*.vue')
 
 ```ts
 interface AppRouteRecord {
-  id?: number                         // 菜单 ID（后端返回时）
-  path: string                        // 路由路径（相对路径，自动拼接）
-  name: string                        // 路由名称（唯一，大写驼峰）
-  component?: string                  // 组件路径（如 '/dashboard/console'）
-  redirect?: string                   // 重定向路径
-  meta: RouteMeta                     // 元数据
-  children?: AppRouteRecord[]         // 子菜单
+  id?: number // 菜单 ID（后端返回时）
+  path: string // 路由路径（相对路径，自动拼接）
+  name: string // 路由名称（唯一，大写驼峰）
+  component?: string // 组件路径（如 '/dashboard/console'）
+  redirect?: string // 重定向路径
+  meta: RouteMeta // 元数据
+  children?: AppRouteRecord[] // 子菜单
 }
 ```
 
@@ -194,21 +194,22 @@ interface AppRouteRecord {
 
 ```ts
 interface RouteMeta {
-  title: string           // 菜单标题（支持 i18n key）
-  icon?: string           // 图标（Remix Icon 格式）
-  roles?: string[]        // 角色权限（前端模式过滤用）
-  isHide?: boolean        // 是否在菜单中隐藏
-  isHideTab?: boolean     // 是否在标签页中隐藏
-  keepAlive?: boolean     // 是否缓存页面
-  fixedTab?: boolean      // 是否固定标签页
-  link?: string           // 外部链接
-  isIframe?: boolean      // 是否 iframe 嵌入
-  authList?: Array<{      // 按钮级权限
+  title: string // 菜单标题（支持 i18n key）
+  icon?: string // 图标（Remix Icon 格式）
+  roles?: string[] // 角色权限（前端模式过滤用）
+  isHide?: boolean // 是否在菜单中隐藏
+  isHideTab?: boolean // 是否在标签页中隐藏
+  keepAlive?: boolean // 是否缓存页面
+  fixedTab?: boolean // 是否固定标签页
+  link?: string // 外部链接
+  isIframe?: boolean // 是否 iframe 嵌入
+  authList?: Array<{
+    // 按钮级权限
     title: string
     authMark: string
   }>
-  authMark?: string       // 权限标识
-  parentPath?: string     // 父级路径
+  authMark?: string // 权限标识
+  parentPath?: string // 父级路径
 }
 ```
 
@@ -216,13 +217,13 @@ interface RouteMeta {
 
 ## 六、权限控制模式对比
 
-| 特性 | 前端模式 | 后端模式 |
-|------|----------|----------|
+| 特性     | 前端模式                     | 后端模式                   |
+| -------- | ---------------------------- | -------------------------- |
 | 菜单来源 | `src/router/modules/` 预定义 | API `/api/v3/system/menus` |
-| 角色过滤 | 前端按 `meta.roles` 过滤 | 后端返回已过滤的数据 |
-| 适用场景 | 演示、小型项目 | 企业级应用 |
-| 灵活性 | 低（需改代码） | 高（可动态配置） |
-| 环境变量 | `VITE_ACCESS_MODE=frontend` | `VITE_ACCESS_MODE=backend` |
+| 角色过滤 | 前端按 `meta.roles` 过滤     | 后端返回已过滤的数据       |
+| 适用场景 | 演示、小型项目               | 企业级应用                 |
+| 灵活性   | 低（需改代码）               | 高（可动态配置）           |
+| 环境变量 | `VITE_ACCESS_MODE=frontend`  | `VITE_ACCESS_MODE=backend` |
 
 ---
 
@@ -268,16 +269,16 @@ interface RouteMeta {
 
 ## 九、相关文件索引
 
-| 文件 | 作用 |
-|------|------|
-| `src/router/guards/beforeEach.ts` | 路由守卫主逻辑 |
-| `src/router/core/MenuProcessor.ts` | 菜单获取与处理 |
-| `src/router/core/RouteRegistry.ts` | 动态路由注册 |
-| `src/router/core/RouteTransformer.ts` | 路由配置转换 |
-| `src/router/core/ComponentLoader.ts` | 组件动态加载 |
-| `src/router/core/RouteValidator.ts` | 路由配置校验 |
-| `src/router/core/RoutePermissionValidator.ts` | 路径权限验证 |
-| `src/store/modules/menu.ts` | 菜单状态管理 |
-| `src/store/modules/user.ts` | 用户状态管理 |
-| `src/hooks/core/useAppMode.ts` | 应用模式判断 |
-| `src/types/router/index.ts` | 路由类型定义 |
+| 文件                                          | 作用           |
+| --------------------------------------------- | -------------- |
+| `src/router/guards/beforeEach.ts`             | 路由守卫主逻辑 |
+| `src/router/core/MenuProcessor.ts`            | 菜单获取与处理 |
+| `src/router/core/RouteRegistry.ts`            | 动态路由注册   |
+| `src/router/core/RouteTransformer.ts`         | 路由配置转换   |
+| `src/router/core/ComponentLoader.ts`          | 组件动态加载   |
+| `src/router/core/RouteValidator.ts`           | 路由配置校验   |
+| `src/router/core/RoutePermissionValidator.ts` | 路径权限验证   |
+| `src/store/modules/menu.ts`                   | 菜单状态管理   |
+| `src/store/modules/user.ts`                   | 用户状态管理   |
+| `src/hooks/core/useAppMode.ts`                | 应用模式判断   |
+| `src/types/router/index.ts`                   | 路由类型定义   |

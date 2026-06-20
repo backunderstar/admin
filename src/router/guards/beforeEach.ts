@@ -284,7 +284,28 @@ async function handleDynamicRoutes(
     // 7. 验证工作标签页
     useWorktabStore().validateWorktabs(router)
 
-    // 8. 静态路由不依赖菜单权限，初始化后直接恢复目标地址。
+    // 8. 读取登录页通过 sessionStorage 传递的 redirect 路径（必须在静态路由检查之前）
+    const loginRedirect = sessionStorage.getItem('login_redirect')
+    if (loginRedirect) {
+      sessionStorage.removeItem('login_redirect')
+      routeInitInProgress = false
+
+      // 验证 redirect 目标路径权限
+      const { homePath } = useCommon()
+      const { path: validatedPath, hasPermission } = RoutePermissionValidator.validatePath(
+        loginRedirect,
+        menuList,
+        homePath.value || '/',
+      )
+
+      closeLoading()
+      return {
+        path: hasPermission ? loginRedirect : validatedPath,
+        replace: true,
+      }
+    }
+
+    // 9. 静态路由不依赖菜单权限，初始化后直接恢复目标地址。
     if (isStaticRoute(to.path)) {
       routeInitInProgress = false
       return {
@@ -295,10 +316,11 @@ async function handleDynamicRoutes(
       }
     }
 
-    // 8. 验证目标路径权限
+    // 10. 确定目标路径并验证权限
+    const redirectTarget = to.path
     const { homePath } = useCommon()
     const { path: validatedPath, hasPermission } = RoutePermissionValidator.validatePath(
-      to.path,
+      redirectTarget,
       menuList,
       homePath.value || '/',
     )
@@ -306,13 +328,13 @@ async function handleDynamicRoutes(
     // 初始化成功，重置进行中标记
     routeInitInProgress = false
 
-    // 9. 重新导航到目标路由
+    // 11. 重新导航到目标路由
     if (!hasPermission) {
       // 无权限访问，跳转到首页
       closeLoading()
 
       // 输出警告信息
-      console.warn(`[RouteGuard] 用户无权限访问路径: ${to.path}，已跳转到首页`)
+      console.warn(`[RouteGuard] 用户无权限访问路径: ${redirectTarget}，已跳转到首页`)
 
       // 直接跳转到首页
       return {
@@ -322,8 +344,8 @@ async function handleDynamicRoutes(
     } else {
       // 有权限，正常导航
       return {
-        path: to.path,
-        query: to.query,
+        path: redirectTarget,
+        query: {},
         hash: to.hash,
         replace: true,
       }

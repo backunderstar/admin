@@ -154,9 +154,11 @@ async function handleLogin() {
     // 7. 登录成功提示
     Message.success(t('login.success.title'))
 
-    // 8. 跳转：优先使用 redirect 参数，没有则去首页
+    // 8. 跳转：将目标路径存入 sessionStorage，通过已注册的 /login 路由触发守卫
+    //    由守卫在动态路由注册后读取并执行实际跳转，避免 push 未注册路径导致 Vue Router 警告
     const redirect = (route.query.redirect as string) || '/'
-    router.push(redirect)
+    sessionStorage.setItem('login_redirect', redirect)
+    router.replace({ name: 'Login', query: { _rd: String(Date.now()) } })
   } catch (error) {
     // HttpError 已在 axios 拦截器中统一显示错误提示，这里无需重复处理
     if (!(error instanceof HttpError)) {

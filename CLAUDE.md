@@ -2,22 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-<!--VITE PLUS START-->
-
-# Using Vite+, the Unified Toolchain for the Web
-
-This project is using Vite+, a unified toolchain built on top of Vite, Rolldown, Vitest, tsdown, Oxlint, Oxfmt, and Vite Task. Vite+ wraps runtime management, package management, and frontend tooling in a single global CLI called `vp`. Vite+ is distinct from Vite, and it invokes Vite through `vp dev` and `vp build`. Run `vp help` to print a list of commands and `vp <command> --help` for information about a specific command.
-
-Docs are local at `node_modules/vite-plus/docs` or online at https://viteplus.dev/guide/.
-
-## Review Checklist
-
-- [ ] Run `vp install` after pulling remote changes and before getting started.
-- [ ] Run `vp check` and `vp test` to format, lint, type check and test changes.
-- [ ] Check if there are `vite.config.ts` tasks or `package.json` scripts necessary for validation, run via `vp run <script>`.
-- [ ] If setup, runtime, or package-manager behavior looks wrong, run `vp env doctor` and include its output when asking for help.
-
-<!--VITE PLUS END-->
+This project uses **Vite+** (`vp` CLI) — a unified toolchain built on Vite, Rolldown, Oxlint, and Oxfmt. Run `vp help` for available commands. Docs: `node_modules/vite-plus/docs` or https://viteplus.dev/guide/.
 
 # Project Overview
 
@@ -42,9 +27,11 @@ vp check              # Full check: lint, type-check, format check
 vp check --fix        # Fix auto-fixable issues (also runs as pre-commit hook on staged files)
 
 # Other
-vp install            # Install dependencies via pnpm
+vp install            # Install dependencies (or: pnpm install)
 vp env doctor         # Diagnose setup/runtime issues
 ```
+
+**Node requirement:** `^20.19.0 || >=22.12.0` (pnpm 11.7.0)
 
 **Pre-commit hook:** `.vite-hooks/pre-commit` runs `vp staged` — auto-fixes lint/format on staged files before each commit.
 
@@ -88,7 +75,7 @@ src/
 
 ## Entry Flow
 
-`src/main.ts` → creates Vue app → `initStore(app)` (Pinia + persisted state) → `initRouter(app)` (creates router, sets up beforeEach/afterEach guards) → `setupErrorHandle(app)` → `app.use(language)` (vue-i18n) → `app.mount('#app')`
+`src/main.ts` → creates Vue app → `initStore(app)` (Pinia + persisted state) → `initializeTheme()` (applies saved or system theme) → `initRouter(app)` (creates router, sets up beforeEach/afterEach guards) → `setupErrorHandle(app)` → `app.use(language)` (vue-i18n) → `app.mount('#app')`
 
 ## Routing Architecture
 

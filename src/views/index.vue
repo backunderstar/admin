@@ -96,7 +96,7 @@
           <div class="flex-1 overflow-y-auto scrollbar-none py-2">
             <a-menu
               :selected-keys="[route.path]"
-              :default-open-keys="defaultOpenKeys"
+              v-model:open-keys="openKeys"
               mode="vertical"
               :collapsed="!menuOpen"
               :accordion="settingStore.uniqueOpened"
@@ -201,24 +201,36 @@ const sidebarWidth = computed(() => {
   return `${settingStore.menuOpenWidth}px`
 })
 
-// ── 默认展开的菜单 ──
-const defaultOpenKeys = computed(() => {
-  if (settingStore.uniqueOpened) return []
-  // 自动展开包含当前路由的父级
-  const keys: string[] = []
-  const findParent = (list: AppRouteRecord[], parents: string[]) => {
-    for (const item of list) {
-      if (item.children?.length) {
-        if (item.children.some((c) => route.path.startsWith(c.path || ''))) {
-          if (item.path) keys.push(item.path)
-        }
-        findParent(item.children, [...parents, item.path || ''])
+// ── 展开的菜单（路由变化时自动展开对应父级） ──
+const openKeys = ref<string[]>([])
+
+const findParentPaths = (list: AppRouteRecord[], target: string): string[] => {
+  for (const item of list) {
+    if (item.children?.length) {
+      if (item.children.some((c) => target.startsWith(c.path || '') || target === c.path)) {
+        return [item.path || '']
       }
+      const found = findParentPaths(item.children, target)
+      if (found.length) return [item.path || '', ...found]
     }
   }
-  findParent(menuStore.menuList, [])
-  return keys
-})
+  return []
+}
+
+// 路由变化时，确保当前路由的父级始终展开
+watch(
+  () => route.path,
+  (path) => {
+    const parentKeys = findParentPaths(menuStore.menuList, path)
+    // 只补充缺失的父级，不关闭用户手动展开的菜单
+    for (const key of parentKeys) {
+      if (!openKeys.value.includes(key)) {
+        openKeys.value.push(key)
+      }
+    }
+  },
+  { immediate: true },
+)
 
 // ── 一级菜单图标（双列模式） ──
 const topLevelMenus = computed(() => menuStore.menuList)
@@ -336,6 +348,15 @@ useAutoLayoutHeight()
 /* 侧边栏宽度过渡 */
 #app-sidebar {
   transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 修正：Arco Design 折叠菜单默认 48px，与侧边栏 64px 不一致导致图标不居中 */
+#app-sidebar :deep(.arco-menu-collapsed) {
+  width: 100%;
+}
+
+#app-sidebar :deep(.arco-menu-collapsed .arco-menu-inner) {
+  padding: 4px 8px;
 }
 
 /* Logo 文字渐隐 */

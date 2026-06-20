@@ -27,15 +27,6 @@ const fastEnterConfig: FastEnterConfig = {
       order: 2,
       routeName: 'Analysis',
     },
-    {
-      name: '电商页',
-      description: '电商数据展示',
-      icon: 'ri:bar-chart-box-line',
-      iconColor: '#7A7FFF',
-      enabled: true,
-      order: 3,
-      routeName: 'Ecommerce',
-    },
   ],
   // 快速链接
   quickLinks: [

@@ -46,6 +46,10 @@ vp install            # Install dependencies via pnpm
 vp env doctor         # Diagnose setup/runtime issues
 ```
 
+**Pre-commit hook:** `.vite-hooks/pre-commit` runs `vp staged` — auto-fixes lint/format on staged files before each commit.
+
+**Testing:** No test framework (vitest) is currently configured. `vp test` is a no-op.
+
 # Code Architecture
 
 ## Structure
@@ -109,9 +113,16 @@ The most complex subsystem. Routes are split into **static** (always accessible,
 - **Menu Layouts**: 4 types (left, top, mixed, dual-column) controlled by `MenuTypeEnum`. Configured via `settingStore.menuType`.
 - **Theme System**: 3 modes (light, dark, system-auto). Menu has 3 themes (design, light, dark). Customizable accent color from `systemMainColor` palette.
 
+## Code Style
+
+- **Formatting:** No semicolons, single quotes (enforced by Oxfmt via `vp fmt`)
+- **Linting:** Oxlint with `vite-plus/prefer-vite-plus-imports` rule — use `vite-plus` imports instead of raw `vite` when available
+
 ## Path Aliases
 
 `@` → `src/`, `@asset` → `src/assets/`, `@imgs` → `src/assets/images/`, `@views` → `src/views/`, `@components` → `src/components/`, `@hooks` → `src/hooks/`, `@utils` → `src/utils/`, `@stores` → `src/store/`, `@router` → `src/router/`
+
+**Note:** `vite.config.ts` maps `@stores` to `./src/stores` (with 's'), but `tsconfig.app.json` and the actual directory both use `src/store` (no 's'). This works at dev time because Vite resolves both, but be aware of the mismatch.
 
 ## Environment Variables
 
@@ -129,3 +140,7 @@ The most complex subsystem. Routes are split into **static** (always accessible,
 ## Route Meta Properties
 
 Routes use `AppRouteRecord.meta` with these key properties: `title` (i18n key), `icon` (Iconify icon name), `keepAlive`, `isHide` (hide from menu), `isHideTab` (hide from worktab), `fixedTab` (non-closable tab), `roles` (role permissions), `authList` (backend permission marks), `link` (external URL), `isIframe`, `isFullPage`, `activePath`.
+
+## Documentation
+
+Chinese-language design docs are in `doc/`: routing implementation (`路由实现.md`), permission system (`权限系统.md`), theme system (`主题系统.md`).

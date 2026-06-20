@@ -34,7 +34,7 @@
 import { useSettingStore } from '@/store/modules/setting'
 import { SystemThemeEnum } from '@/enums/appEnum'
 import AppConfig from '@/config'
-import { SystemThemeTypes } from '@/types/store'
+import type { SystemThemeTypes } from '@/types/store'
 import { getDarkColor, getLightColor, setArcoThemeColor } from '@/utils/ui'
 import { usePreferredDark } from '@vueuse/core'
 import { watch } from 'vue'
@@ -72,12 +72,15 @@ export function useTheme() {
 
     const currentTheme = AppConfig.systemThemeStyles[theme as keyof SystemThemeTypes]
 
-    if (currentTheme) {
+    if (currentTheme && el) {
       el.setAttribute('class', currentTheme.className)
     }
 
+    // 同步 Arco Design 暗黑模式（body[arco-theme='dark']）
+    document.body.setAttribute('arco-theme', isDark ? 'dark' : 'light')
+
     // 设置按钮颜色加深或变浅
-    const primary = settingStore.systemThemeColor
+    const primary = settingStore.systemThemeColor ?? '#5D87FF'
 
     for (let i = 1; i <= 9; i++) {
       document.documentElement.style.setProperty(
@@ -144,12 +147,18 @@ export function initializeTheme() {
 
     // 设置主题 class
     const currentTheme = AppConfig.systemThemeStyles[actualTheme as keyof SystemThemeTypes]
-    if (currentTheme) {
+    if (currentTheme && el) {
       el.setAttribute('class', currentTheme.className)
     }
 
+    // 同步 Arco Design 暗黑模式（body[arco-theme='dark']）
+    document.body.setAttribute(
+      'arco-theme',
+      actualTheme === SystemThemeEnum.DARK ? 'dark' : 'light',
+    )
+
     // 设置主题颜色
-    setArcoThemeColor(settingStore.systemThemeColor)
+    setArcoThemeColor(settingStore.systemThemeColor ?? '#5D87FF')
 
     // 设置圆角
     document.documentElement.style.setProperty('--custom-radius', `${settingStore.customRadius}rem`)

@@ -127,6 +127,7 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useSettingStore } from '@/store/modules/setting'
+import { useTheme } from '@/hooks/core/useTheme'
 import AppConfig from '@/config'
 import { SystemThemeEnum } from '@/enums/appEnum'
 import mittBus from '@/utils/mitt'
@@ -135,6 +136,7 @@ defineOptions({ name: 'ZhaoSettingsPanel' })
 
 const { t } = useI18n()
 const settingStore = useSettingStore()
+const { switchThemeStyles } = useTheme()
 
 const visible = ref(false)
 
@@ -142,7 +144,7 @@ const layoutList = AppConfig.menuLayoutList
 const themeList = AppConfig.settingThemeList
 
 const onThemeChange = (theme: SystemThemeEnum) => {
-  settingStore.setGlopTheme(theme, theme)
+  switchThemeStyles(theme)
 }
 
 onMounted(() => {

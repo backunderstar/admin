@@ -1,1 +1,5 @@
 @import 'tailwindcss';
+
+.dark {
+  --default-box-color: var(--color-bg-2, #232324);
+}

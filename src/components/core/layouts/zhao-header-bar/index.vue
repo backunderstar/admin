@@ -160,6 +160,7 @@ import { useMenuStore } from '@/store/modules/menu'
 import { useWorktabStore } from '@/store/modules/worktab'
 import { useHeaderBar } from '@/hooks/core/useHeaderBar'
 import { useCommon } from '@/hooks/core/useCommon'
+import { useTheme } from '@/hooks/core/useTheme'
 import { MenuTypeEnum, LanguageEnum, SystemThemeEnum } from '@/enums/appEnum'
 import { Message, Modal } from '@arco-design/web-vue'
 import mittBus from '@/utils/mitt'
@@ -180,6 +181,7 @@ const menuStore = useMenuStore()
 const worktabStore = useWorktabStore()
 const common = useCommon()
 const headerBar = useHeaderBar()
+const { switchThemeStyles } = useTheme()
 
 // ── 功能开关 ──
 const shouldShowMenuButton = headerBar.shouldShowMenuButton
@@ -251,10 +253,6 @@ const onMenuSelect = (item: AppRouteRecord) => {
 
 // ── 主题切换 ──
 const toggleTheme = () => {
-  if (settingStore.isDark) {
-    settingStore.setGlopTheme(SystemThemeEnum.LIGHT, SystemThemeEnum.LIGHT)
-  } else {
-    settingStore.setGlopTheme(SystemThemeEnum.DARK, SystemThemeEnum.DARK)
-  }
+  switchThemeStyles(settingStore.isDark ? SystemThemeEnum.LIGHT : SystemThemeEnum.DARK)
 }
 </script>

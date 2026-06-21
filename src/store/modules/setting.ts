@@ -350,7 +350,7 @@ export const useSettingStore = defineStore(
      */
     const setCustomRadius = (radius: string) => {
       customRadius.value = radius
-      document.documentElement.style.setProperty('--custom-radius', `${radius}rem`)
+      document.body.style.setProperty('--custom-radius', `${radius}rem`)
     }
 
     /**

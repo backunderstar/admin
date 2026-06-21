@@ -1,8 +1,5 @@
 ﻿<template>
-  <div
-    class="flex items-center justify-between h-full px-4 border-b border-[var(--color-border)]"
-    :style="{ background: 'var(--color-bg-2)' }"
-  >
+  <div class="flex items-center justify-between h-full px-4">
     <!-- 左半部分 -->
     <div class="flex items-center gap-2 min-w-0">
       <!-- 菜单折叠/展开按钮 -->

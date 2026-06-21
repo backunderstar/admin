@@ -108,7 +108,10 @@ export function hexToRgba(hex: string, opacity: number): RgbaResult {
   }
 
   // 解析 RGB 值
-  const [red, green, blue] = cleanHex.match(/\w\w/g)!.map((x) => parseInt(x, 16))
+  const rgb = cleanHex.match(/\w\w/g)!.map((x) => parseInt(x, 16))
+  const red = rgb[0] ?? 0
+  const green = rgb[1] ?? 0
+  const blue = rgb[2] ?? 0
 
   // 确保 opacity 在有效范围内
   const validOpacity = Math.max(0, Math.min(1, opacity))
@@ -184,11 +187,11 @@ export function colourBlend(color1: string, color2: string, ratio: number): stri
   const rgb2 = hexToRgb(color2)
 
   const blendedRgb = rgb1.map((value1, index) => {
-    const value2 = rgb2[index]
+    const value2 = rgb2[index] ?? 0
     return Math.round(value1 * (1 - validRatio) + value2 * validRatio)
   })
 
-  return rgbToHex(blendedRgb[0], blendedRgb[1], blendedRgb[2])
+  return rgbToHex(blendedRgb[0]!, blendedRgb[1]!, blendedRgb[2]!)
 }
 
 /**
@@ -211,7 +214,7 @@ export function getLightColor(color: string, level: number, isDark: boolean = fa
   const rgb = hexToRgb(color)
   const lightRgb = rgb.map((value) => Math.floor((255 - value) * level + value))
 
-  return rgbToHex(lightRgb[0], lightRgb[1], lightRgb[2])
+  return rgbToHex(lightRgb[0]!, lightRgb[1]!, lightRgb[2]!)
 }
 
 /**
@@ -229,7 +232,7 @@ export function getDarkColor(color: string, level: number): string {
   const rgb = hexToRgb(color)
   const darkRgb = rgb.map((value) => Math.floor(value * (1 - level)))
 
-  return rgbToHex(darkRgb[0], darkRgb[1], darkRgb[2])
+  return rgbToHex(darkRgb[0]!, darkRgb[1]!, darkRgb[2]!)
 }
 
 /**
@@ -238,20 +241,16 @@ export function getDarkColor(color: string, level: number): string {
  * @param isDark 是否为暗色主题
  */
 export function handleArcoThemeColor(theme: string, isDark: boolean = false): void {
-  document.documentElement.style.setProperty('--color-primary-6', theme)
+  const bodyStyle = document.body.style
+
+  bodyStyle.setProperty('--color-primary-6', theme)
 
   for (let i = 1; i <= 9; i++) {
-    document.documentElement.style.setProperty(
-      `--color-primary-light-${i}`,
-      getLightColor(theme, i / 10, isDark),
-    )
+    bodyStyle.setProperty(`--color-primary-light-${i}`, getLightColor(theme, i / 10, isDark))
   }
 
   for (let i = 1; i <= 9; i++) {
-    document.documentElement.style.setProperty(
-      `--color-primary-dark-${i}`,
-      getDarkColor(theme, i / 10),
-    )
+    bodyStyle.setProperty(`--color-primary-dark-${i}`, getDarkColor(theme, i / 10))
   }
 }
 
@@ -261,14 +260,17 @@ export function handleArcoThemeColor(theme: string, isDark: boolean = false): vo
  */
 export function setArcoThemeColor(color: string): void {
   const mixColor = '#ffffff'
-  const elStyle = document.documentElement.style
+  const bodyStyle = document.body.style
 
-  elStyle.setProperty('--color-primary-6', color)
+  bodyStyle.setProperty('--theme-color', color)
   handleArcoThemeColor(color, useSettingStore().isDark)
+
+  // 设置 Arco 组件需要的 RGB 格式变量（如菜单选中态 rgb(var(--primary-6))）
+  const rgb = hexToRgb(color)
+  bodyStyle.setProperty('--primary-6', `${rgb[0]}, ${rgb[1]}, ${rgb[2]}`)
 
   // 生成更淡一点的颜色
   for (let i = 1; i < 16; i++) {
-    const itemColor = colourBlend(color, mixColor, i / 16)
-    elStyle.setProperty(`--color-primary-custom-${i}`, itemColor)
+    bodyStyle.setProperty(`--color-primary-custom-${i}`, colourBlend(color, mixColor, i / 16))
   }
 }

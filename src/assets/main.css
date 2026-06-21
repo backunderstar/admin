@@ -3,3 +3,10 @@
 .dark {
   --default-box-color: var(--color-bg-2, #232324);
 }
+
+/* 自定义圆角覆盖 Arco Design 默认圆角 */
+:root {
+  --border-radius-small: var(--custom-radius, 0.375rem);
+  --border-radius-medium: var(--custom-radius, 0.5rem);
+  --border-radius-large: var(--custom-radius, 0.75rem);
+}

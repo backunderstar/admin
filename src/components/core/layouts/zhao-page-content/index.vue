@@ -53,7 +53,10 @@ watch(
 )
 
 // ── 页面过渡动画 ──
-const transitionName = computed(() => settingStore.pageTransition || 'fade')
+const transitionName = computed(() => {
+  const t = settingStore.pageTransition
+  return !t || t === 'none' ? '' : t
+})
 
 // ── 容器宽度 ──
 const containerStyle = computed(() => {

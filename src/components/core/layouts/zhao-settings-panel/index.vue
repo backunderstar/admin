@@ -66,6 +66,63 @@
       </div>
     </div>
 
+    <!-- 主题色 -->
+    <div class="mb-6">
+      <div class="text-sm font-medium text-[var(--color-text-1)] mb-3">
+        {{ t('setting.color.title') }}
+      </div>
+      <div class="flex gap-2 flex-wrap">
+        <div
+          v-for="color in mainColors"
+          :key="color"
+          class="w-7 h-7 rounded-full cursor-pointer transition-all hover:scale-110"
+          :class="settingStore.systemThemeColor === color ? 'ring-2 ring-offset-2' : ''"
+          :style="{
+            background: color,
+            '--tw-ring-color': color,
+            '--tw-ring-offset-color': 'var(--color-bg-1)',
+          }"
+          @click="settingStore.setThemeColor(color)"
+        />
+      </div>
+    </div>
+
+    <!-- 圆角 -->
+    <div class="mb-6">
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-sm font-medium text-[var(--color-text-1)]">
+          {{ t('setting.basics.list.borderRadius') }}
+        </span>
+        <span class="text-xs text-[var(--color-text-3)]">{{ settingStore.customRadius }}rem</span>
+      </div>
+      <a-slider
+        :model-value="Number(settingStore.customRadius)"
+        :min="0"
+        :max="2"
+        :step="0.25"
+        @change="(v: number) => settingStore.setCustomRadius(String(v))"
+      />
+    </div>
+
+    <!-- 页面动画 -->
+    <div class="mb-6">
+      <div class="text-sm font-medium text-[var(--color-text-1)] mb-3">
+        {{ t('setting.basics.list.pageTransition') }}
+      </div>
+      <a-radio-group
+        :model-value="settingStore.pageTransition"
+        @change="(v: string) => settingStore.setPageTransition(v)"
+        type="button"
+        size="small"
+      >
+        <a-radio value="none">{{ t('setting.transition.list.none') }}</a-radio>
+        <a-radio value="fade">{{ t('setting.transition.list.fade') }}</a-radio>
+        <a-radio value="slide-left">{{ t('setting.transition.list.slideLeft') }}</a-radio>
+        <a-radio value="slide-bottom">{{ t('setting.transition.list.slideBottom') }}</a-radio>
+        <a-radio value="slide-top">{{ t('setting.transition.list.slideTop') }}</a-radio>
+      </a-radio-group>
+    </div>
+
     <!-- 功能开关 -->
     <div class="mb-6">
       <div class="text-sm font-medium text-[var(--color-text-1)] mb-3">
@@ -86,6 +143,12 @@
             :model-value="settingStore.showWorkTab"
             @change="(v: boolean) => settingStore.setWorkTab(v)"
           />
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-sm text-[var(--color-text-2)]">{{
+            t('setting.basics.list.progressBar')
+          }}</span>
+          <a-switch :model-value="settingStore.showNprogress" @change="settingStore.setNprogress" />
         </div>
         <div class="flex items-center justify-between">
           <span class="text-sm text-[var(--color-text-2)]">{{
@@ -142,6 +205,7 @@ const visible = ref(false)
 
 const layoutList = AppConfig.menuLayoutList
 const themeList = AppConfig.settingThemeList
+const mainColors = AppConfig.systemMainColor
 
 const onThemeChange = (theme: SystemThemeEnum) => {
   switchThemeStyles(theme)

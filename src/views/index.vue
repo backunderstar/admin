@@ -126,9 +126,15 @@
     <!-- ═══════════════════════════════════════════
        主内容区
      ═══════════════════════════════════════════ -->
-    <main id="app-main" class="flex-1 flex flex-col h-screen min-w-0 overflow-hidden">
+    <main
+      id="app-main"
+      class="flex-1 flex flex-col h-screen min-w-0 overflow-hidden bg-[var(--color-fill-2)]"
+    >
       <!-- 顶部栏 -->
-      <div id="app-header" class="flex-shrink-0 sticky top-0 z-10">
+      <div
+        id="app-header"
+        class="flex-shrink-0 sticky top-0 z-10 bg-[var(--color-bg-1)] border-b border-[var(--color-border)]"
+      >
         <ZhaoHeaderBar @toggle-menu="toggleMenu" />
       </div>
       <!-- 页面内容 -->

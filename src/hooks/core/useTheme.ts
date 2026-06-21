@@ -83,7 +83,7 @@ export function useTheme() {
     const primary = settingStore.systemThemeColor ?? '#5D87FF'
 
     for (let i = 1; i <= 9; i++) {
-      document.documentElement.style.setProperty(
+      document.body.style.setProperty(
         `--color-primary-light-${i}`,
         isDark ? `${getDarkColor(primary, i / 10)}` : `${getLightColor(primary, i / 10)}`,
       )
@@ -161,7 +161,7 @@ export function initializeTheme() {
     setArcoThemeColor(settingStore.systemThemeColor ?? '#5D87FF')
 
     // 设置圆角
-    document.documentElement.style.setProperty('--custom-radius', `${settingStore.customRadius}rem`)
+    document.body.style.setProperty('--custom-radius', `${settingStore.customRadius}rem`)
   }
 
   // 应用主题

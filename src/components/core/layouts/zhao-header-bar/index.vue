@@ -11,7 +11,10 @@
         class="flex items-center justify-center w-8 h-8 rounded-md cursor-pointer text-[var(--color-text-3)] hover:text-[var(--color-text-1)] hover:bg-[var(--color-fill-2)] transition-colors"
         @click="$emit('toggle-menu')"
       >
-        <ZhaoIcon icon="ri:menu-fold-line" class="text-lg" />
+        <ZhaoIcon
+          :icon="settingStore.menuOpen ? 'ri:menu-fold-line' : 'ri:menu-unfold-line'"
+          class="text-lg"
+        />
       </div>
 
       <!-- 刷新按钮 -->

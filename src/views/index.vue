@@ -73,7 +73,7 @@
         >
           <!-- Logo -->
           <div
-            class="flex items-center h-16 px-5 flex-shrink-0 cursor-pointer gap-3"
+            class="flex items-center justify-center h-16 flex-shrink-0 cursor-pointer"
             @click="goHome"
           >
             <div
@@ -82,18 +82,19 @@
             >
               <ZhaoIcon icon="ri:admin-line" class="text-white text-base" />
             </div>
-            <Transition name="fade">
-              <span
-                v-show="menuOpen"
-                class="text-base font-bold whitespace-nowrap truncate"
-                :style="{ color: getMenuTheme.systemNameColor }"
-              >
-                {{ systemInfo.name }}
-              </span>
-            </Transition>
+            <span
+              class="text-base font-bold whitespace-nowrap overflow-hidden transition-all duration-250"
+              :class="menuOpen ? 'max-w-[200px] opacity-100 ml-3' : 'max-w-0 opacity-0 ml-0'"
+              :style="{ color: getMenuTheme.systemNameColor }"
+            >
+              {{ systemInfo.name }}
+            </span>
           </div>
           <!-- 菜单 -->
-          <div class="flex-1 overflow-y-auto scrollbar-none py-2">
+          <div
+            class="flex-1 overflow-y-auto scrollbar-none py-2"
+            :class="{ 'flex justify-center': !menuOpen }"
+          >
             <a-menu
               :selected-keys="[route.path]"
               v-model:open-keys="openKeys"
@@ -350,14 +351,7 @@ useAutoLayoutHeight()
   transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* 修正：Arco Design 折叠菜单默认 48px，与侧边栏 64px 不一致导致图标不居中 */
-#app-sidebar :deep(.arco-menu-collapsed) {
-  width: 100%;
-}
-
-#app-sidebar :deep(.arco-menu-collapsed .arco-menu-inner) {
-  padding: 4px 8px;
-}
+/* 折叠菜单居中：保持 Arco 默认 48px 宽度，由父容器 flex 居中 */
 
 /* Logo 文字渐隐 */
 .fade-enter-active,

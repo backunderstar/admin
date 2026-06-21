@@ -230,11 +230,146 @@
       "console": "工作台",
       "analysis": "分析页"
     },
+    "system": {
+      "title": "系统管理",
+      "user": "用户管理",
+      "role": "角色管理"
+    },
+    "content": {
+      "title": "内容管理",
+      "article": "文章管理",
+      "articleEdit": "编辑文章",
+      "tag": "标签管理",
+      "category": "分类管理",
+      "image": "图片管理",
+      "comment": "评论管理"
+    },
     "exception": {
       "title": "异常页面",
       "forbidden": "403",
       "notFound": "404",
       "serverError": "500"
+    }
+  },
+  "system": {
+    "user": {
+      "title": "用户管理",
+      "columns": {
+        "userName": "用户名",
+        "nickName": "昵称",
+        "userGender": "性别",
+        "userPhone": "手机号",
+        "userEmail": "邮箱",
+        "userRoles": "角色",
+        "status": "状态",
+        "createTime": "创建时间",
+        "action": "操作"
+      },
+      "gender": {
+        "male": "男",
+        "female": "女",
+        "unknown": "未知"
+      },
+      "status": {
+        "enabled": "启用",
+        "disabled": "禁用"
+      }
+    },
+    "role": {
+      "title": "角色管理",
+      "columns": {
+        "roleName": "角色名称",
+        "roleCode": "角色编码",
+        "description": "描述",
+        "enabled": "状态",
+        "createTime": "创建时间"
+      },
+      "status": {
+        "enabled": "启用",
+        "disabled": "禁用"
+      }
+    }
+  },
+  "content": {
+    "article": {
+      "title": "文章管理",
+      "columns": {
+        "title": "标题",
+        "summary": "摘要",
+        "categoryName": "分类",
+        "tags": "标签",
+        "status": "状态",
+        "author": "作者",
+        "createTime": "创建时间",
+        "action": "操作"
+      },
+      "status": {
+        "draft": "草稿",
+        "published": "已发布"
+      }
+    },
+    "articleEdit": {
+      "title": "编辑文章",
+      "placeholder": "请输入文章标题",
+      "save": "保存",
+      "publish": "发布"
+    },
+    "tag": {
+      "title": "标签管理",
+      "columns": {
+        "tagName": "标签名称",
+        "articleCount": "文章数",
+        "createTime": "创建时间",
+        "action": "操作"
+      },
+      "addTag": "添加标签",
+      "addTagPlaceholder": "请输入标签名称"
+    },
+    "category": {
+      "title": "分类管理",
+      "columns": {
+        "categoryName": "分类名称",
+        "description": "描述",
+        "articleCount": "文章数",
+        "enabled": "状态",
+        "createTime": "创建时间",
+        "action": "操作"
+      },
+      "status": {
+        "enabled": "启用",
+        "disabled": "禁用"
+      },
+      "addCategory": "添加分类"
+    },
+    "image": {
+      "title": "图片管理",
+      "columns": {
+        "name": "文件名",
+        "preview": "预览",
+        "size": "大小",
+        "type": "类型",
+        "createTime": "上传时间",
+        "action": "操作"
+      },
+      "upload": "上传图片",
+      "empty": "暂无图片"
+    },
+    "comment": {
+      "title": "评论管理",
+      "columns": {
+        "articleTitle": "文章",
+        "content": "评论内容",
+        "userName": "用户",
+        "email": "邮箱",
+        "status": "状态",
+        "createTime": "评论时间",
+        "action": "操作"
+      },
+      "status": {
+        "pending": "待审核",
+        "approved": "已通过"
+      },
+      "approve": "通过"
     }
   },
   "table": {
@@ -261,6 +396,8 @@
       "expand": "展开",
       "index": "序号"
     },
+    "edit": "编辑",
+    "delete": "删除",
     "zebra": "斑马纹",
     "border": "边框",
     "headerBackground": "表头背景"

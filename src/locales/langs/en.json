@@ -230,11 +230,146 @@
       "console": "Console",
       "analysis": "Analysis"
     },
+    "system": {
+      "title": "System",
+      "user": "User Management",
+      "role": "Role Management"
+    },
+    "content": {
+      "title": "Content",
+      "article": "Articles",
+      "articleEdit": "Edit Article",
+      "tag": "Tags",
+      "category": "Categories",
+      "image": "Images",
+      "comment": "Comments"
+    },
     "exception": {
       "title": "Exception",
       "forbidden": "403",
       "notFound": "404",
       "serverError": "500"
+    }
+  },
+  "system": {
+    "user": {
+      "title": "User Management",
+      "columns": {
+        "userName": "Username",
+        "nickName": "Nickname",
+        "userGender": "Gender",
+        "userPhone": "Phone",
+        "userEmail": "Email",
+        "userRoles": "Roles",
+        "status": "Status",
+        "createTime": "Created",
+        "action": "Actions"
+      },
+      "gender": {
+        "male": "Male",
+        "female": "Female",
+        "unknown": "Unknown"
+      },
+      "status": {
+        "enabled": "Enabled",
+        "disabled": "Disabled"
+      }
+    },
+    "role": {
+      "title": "Role Management",
+      "columns": {
+        "roleName": "Role Name",
+        "roleCode": "Role Code",
+        "description": "Description",
+        "enabled": "Status",
+        "createTime": "Created"
+      },
+      "status": {
+        "enabled": "Enabled",
+        "disabled": "Disabled"
+      }
+    }
+  },
+  "content": {
+    "article": {
+      "title": "Article Management",
+      "columns": {
+        "title": "Title",
+        "summary": "Summary",
+        "categoryName": "Category",
+        "tags": "Tags",
+        "status": "Status",
+        "author": "Author",
+        "createTime": "Created",
+        "action": "Actions"
+      },
+      "status": {
+        "draft": "Draft",
+        "published": "Published"
+      }
+    },
+    "articleEdit": {
+      "title": "Edit Article",
+      "placeholder": "Enter article title",
+      "save": "Save",
+      "publish": "Publish"
+    },
+    "tag": {
+      "title": "Tag Management",
+      "columns": {
+        "tagName": "Tag Name",
+        "articleCount": "Articles",
+        "createTime": "Created",
+        "action": "Actions"
+      },
+      "addTag": "Add Tag",
+      "addTagPlaceholder": "Enter tag name"
+    },
+    "category": {
+      "title": "Category Management",
+      "columns": {
+        "categoryName": "Category Name",
+        "description": "Description",
+        "articleCount": "Articles",
+        "enabled": "Status",
+        "createTime": "Created",
+        "action": "Actions"
+      },
+      "status": {
+        "enabled": "Enabled",
+        "disabled": "Disabled"
+      },
+      "addCategory": "Add Category"
+    },
+    "image": {
+      "title": "Image Management",
+      "columns": {
+        "name": "File Name",
+        "preview": "Preview",
+        "size": "Size",
+        "type": "Type",
+        "createTime": "Uploaded",
+        "action": "Actions"
+      },
+      "upload": "Upload Image",
+      "empty": "No images"
+    },
+    "comment": {
+      "title": "Comment Management",
+      "columns": {
+        "articleTitle": "Article",
+        "content": "Content",
+        "userName": "User",
+        "email": "Email",
+        "status": "Status",
+        "createTime": "Commented",
+        "action": "Actions"
+      },
+      "status": {
+        "pending": "Pending",
+        "approved": "Approved"
+      },
+      "approve": "Approve"
     }
   },
   "table": {
@@ -261,6 +396,8 @@
       "expand": "Expand",
       "index": "Index"
     },
+    "edit": "Edit",
+    "delete": "Delete",
     "zebra": "Zebra",
     "border": "Border",
     "headerBackground": "Header BG"

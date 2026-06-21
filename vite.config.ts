@@ -6,12 +6,19 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 import { vitePluginForArco } from '@arco-plugins/vite-vue'
 import iconify from '@tomjs/vite-plugin-iconify'
 import tailwindcss from '@tailwindcss/vite'
+import { viteMockServe } from 'vite-plugin-mock'
 
 // https://vite.dev/config/
 export default ({ mode }: { mode: string }) => {
   const root = process.cwd()
   const env = loadEnv(mode, root)
-  const { VITE_VERSION, VITE_PORT, VITE_BASE_URL, VITE_API_URL, VITE_API_PROXY_URL } = env
+  const {
+    VITE_VERSION,
+    VITE_PORT: _VITE_PORT,
+    VITE_BASE_URL,
+    VITE_API_URL,
+    VITE_API_PROXY_URL,
+  } = env
 
   console.log(`🚀 API_URL = ${VITE_API_URL}`)
   console.log(`🚀 VERSION = ${VITE_VERSION}`)
@@ -40,6 +47,17 @@ export default ({ mode }: { mode: string }) => {
         local: true, // 将所有图标集打包进dist目录
         // local: ['ep'] // 可选：只打包指定图标集(如element-plus)
       }),
+      // 开发环境启用本地 Mock（vite-plugin-mock）
+      ...(mode === 'development'
+        ? [
+            viteMockServe({
+              mockPath: 'mock',
+              enable: true,
+              // 记录 mock 请求日志，方便调试
+              logger: true,
+            }),
+          ]
+        : []),
     ],
     resolve: {
       alias: {

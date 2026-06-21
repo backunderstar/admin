@@ -98,7 +98,12 @@ The most complex subsystem. Routes are split into **static** (always accessible,
 - **Multi-Tab (Worktab)**: `useWorktabStore` tracks open tabs, routes auto-register via `setWorktab()` in the guard. Supports fixed tabs, iframe tabs, keep-alive, and tab validation on route init.
 - **WebSocket**: Custom singleton class with heartbeat, message queue for pre-connect buffering, exponential backoff reconnection (up to 10 attempts), and ping/pong keepalive.
 - **Menu Layouts**: 4 types (left, top, mixed, dual-column) controlled by `MenuTypeEnum`. Configured via `settingStore.menuType`.
-- **Theme System**: 3 modes (light, dark, system-auto). Menu has 3 themes (design, light, dark). Customizable accent color from `systemMainColor` palette.
+- **Theme System**: 3 modes (light, dark, system-auto). Menu has 3 themes (design, light, dark). Customizable accent color from `systemMainColor` palette. Migrated from Element Plus to Arco Design (git history: commit b577c8b).
+- **useTable Hook**: Enterprise-grade table composable (`src/hooks/core/useTable.ts`) with auto-pagination, smart debounce, 5 refresh strategies (create/update/delete/manual/soft), request cancellation, and optional configurable cache with 4 invalidation strategies.
+- **useChart Hook**: ECharts lifecycle composable (`src/hooks/core/useChart.ts`) with auto theme-adapt, resize-on-menu-toggle, lazy init via IntersectionObserver, empty state, and unified style helpers (axis, tooltip, legend).
+- **useCeremony Hook**: Festival/celebration composable — detects holiday dates and controls firework animations and festive text display.
+- **useAppMode Hook**: Reads `VITE_ACCESS_MODE` env var to determine `'frontend'` vs `'backend'` permission mode — used by `MenuProcessor.getMenuList()` and `useAuth.hasAuth()`.
+- **useTableStore**: Pinia store (`src/store/modules/table.ts`) persisting table display preferences (size, zebra stripes, borders, header background, fullscreen) to localStorage.
 
 ## Code Style
 

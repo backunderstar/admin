@@ -150,9 +150,9 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import ZhaoBreadcrumb from '@/components/core/layouts/zhao-breadcrumb/index.vue'
-import ZhaoHorizontalMenu from '@/components/core/layouts/zhao-menus/zhao-horizontal-menu/index.vue'
-import ZhaoMixedMenu from '@/components/core/layouts/zhao-menus/zhao-mixed-menu/index.vue'
+import ZhaoBreadcrumb from '@/components/layouts/zhao-breadcrumb/index.vue'
+import ZhaoHorizontalMenu from '@/components/layouts/zhao-menus/zhao-horizontal-menu/index.vue'
+import ZhaoMixedMenu from '@/components/layouts/zhao-menus/zhao-mixed-menu/index.vue'
 import { useI18n } from 'vue-i18n'
 import { useUserStore } from '@/store/modules/user'
 import { useSettingStore } from '@/store/modules/setting'

@@ -5,13 +5,32 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { fetchGetImageList, fetchUploadImage, fetchDeleteImage } from '@/api/content'
+import ProTable from '@/components/ProTable/index.vue'
+import type { SearchField, ProTableColumn } from '@/components/ProTable/types'
 
 const { t } = useI18n()
 
-const searchParams = reactive({ name: '' })
+const searchFields: SearchField[] = [
+  {
+    field: 'name',
+    label: t('content.image.columns.name'),
+    type: 'input',
+    placeholder: t('table.searchBar.searchInputPlaceholder'),
+  },
+]
+
+const columns: ProTableColumn[] = [
+  { title: t('content.image.columns.preview'), dataIndex: 'thumbUrl', width: 100 },
+  { title: t('content.image.columns.name'), dataIndex: 'name' },
+  { title: t('content.image.columns.size'), dataIndex: 'size', width: 100 },
+  { title: t('content.image.columns.type'), dataIndex: 'type', width: 120 },
+  { title: t('content.image.columns.createTime'), dataIndex: 'createTime', width: 180 },
+]
+
 const tableData = ref<Api.Content.ImageListItem[]>([])
 const loading = ref(false)
-const pagination = reactive({ current: 1, size: 10, total: 0 })
+const pagination = reactive({ current: 1, pageSize: 10, total: 0 })
+const searchParams = reactive({ name: '' })
 const uploading = ref(false)
 
 async function fetchData() {
@@ -19,7 +38,7 @@ async function fetchData() {
   try {
     const params: Api.Content.ImageSearchParams = {
       current: pagination.current,
-      size: pagination.size,
+      size: pagination.pageSize,
     }
     if (searchParams.name) params.name = searchParams.name
     const res = await fetchGetImageList(params)
@@ -46,7 +65,7 @@ function handlePageChange(current: number) {
 }
 
 function handlePageSizeChange(size: number) {
-  pagination.size = size
+  pagination.pageSize = size
   pagination.current = 1
   fetchData()
 }
@@ -63,9 +82,9 @@ async function handleUpload(_file: File) {
   }
 }
 
-async function handleDelete(id: number) {
+async function handleDelete(row: Record<string, any>) {
   try {
-    await fetchDeleteImage(id)
+    await fetchDeleteImage(row.id)
     fetchData()
   } catch {
     // ignore
@@ -85,99 +104,48 @@ onMounted(() => {
 
 <template>
   <div class="content-image-page">
-    <div class="mb-4 flex items-center justify-between">
-      <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-100">
-        {{ t('content.image.title') }}
-      </h2>
-      <a-upload :custom-request="handleUpload" :show-file-list="false" accept="image/*">
-        <a-button type="primary" :loading="uploading">
-          <template #icon><icon-upload /></template>
-          {{ t('content.image.upload') }}
-        </a-button>
-      </a-upload>
-    </div>
+    <ProTable
+      :title="t('content.image.title')"
+      :columns="columns"
+      :data="tableData"
+      :loading="loading"
+      :pagination="pagination"
+      :search-fields="searchFields"
+      :search-model="searchParams"
+      :row-key="'id'"
+      :show-add="false"
+      @search="handleSearch"
+      @reset="handleReset"
+      @delete="handleDelete"
+      @page-change="handlePageChange"
+      @page-size-change="handlePageSizeChange"
+    >
+      <!-- 预览列 -->
+      <template #column-thumbUrl="{ record }">
+        <a-image
+          :src="record.thumbUrl"
+          :preview-src="record.url"
+          width="60"
+          height="60"
+          fit="cover"
+          style="border-radius: 4px"
+        />
+      </template>
 
-    <a-card class="mb-4" :bordered="false">
-      <a-form :model="searchParams" layout="inline" @submit="handleSearch">
-        <a-form-item field="name" :label="t('content.image.columns.name')">
-          <a-input
-            v-model="searchParams.name"
-            :placeholder="t('table.searchBar.searchInputPlaceholder')"
-            allow-clear
-            style="width: 200px"
-          />
-        </a-form-item>
-        <a-form-item>
-          <a-space>
-            <a-button type="primary" html-type="submit">
-              <template #icon><icon-search /></template>
-              {{ t('table.searchBar.search') }}
-            </a-button>
-            <a-button @click="handleReset">{{ t('table.searchBar.reset') }}</a-button>
-          </a-space>
-        </a-form-item>
-      </a-form>
-    </a-card>
+      <!-- 大小列 -->
+      <template #column-size="{ record }">
+        {{ formatSize(record.size) }}
+      </template>
 
-    <a-card :bordered="false">
-      <a-table
-        :data="tableData"
-        :loading="loading"
-        :pagination="{
-          current: pagination.current,
-          pageSize: pagination.size,
-          total: pagination.total,
-          showTotal: true,
-          showPageSize: true,
-          pageSizeOptions: [10, 20, 50],
-          onChange: handlePageChange,
-          onPageSizeChange: handlePageSizeChange,
-        }"
-        :row-key="'id'"
-        stripe
-      >
-        <template #columns>
-          <a-table-column title="#" :width="60">
-            <template #cell="{ rowIndex }">
-              {{ (pagination.current - 1) * pagination.size + rowIndex + 1 }}
-            </template>
-          </a-table-column>
-          <a-table-column :title="t('content.image.columns.preview')" :width="100">
-            <template #cell="{ record }">
-              <a-image
-                :src="record.thumbUrl"
-                :preview-src="record.url"
-                width="60"
-                height="60"
-                fit="cover"
-                style="border-radius: 4px"
-              />
-            </template>
-          </a-table-column>
-          <a-table-column :title="t('content.image.columns.name')" data-index="name" />
-          <a-table-column :title="t('content.image.columns.size')" :width="100">
-            <template #cell="{ record }">
-              {{ formatSize(record.size) }}
-            </template>
-          </a-table-column>
-          <a-table-column :title="t('content.image.columns.type')" data-index="type" :width="120" />
-          <a-table-column
-            :title="t('content.image.columns.createTime')"
-            data-index="createTime"
-            :width="180"
-          />
-          <a-table-column :title="t('content.image.columns.action')" :width="100" fixed="right">
-            <template #cell="{ record }">
-              <a-popconfirm :content="t('common.tips')" @ok="handleDelete(record.id)">
-                <a-button type="text" size="small" status="danger">
-                  <template #icon><icon-delete /></template>
-                  {{ t('table.delete') }}
-                </a-button>
-              </a-popconfirm>
-            </template>
-          </a-table-column>
-        </template>
-      </a-table>
-    </a-card>
+      <!-- 标题栏额外区域：上传按钮 -->
+      <template #header-extra>
+        <a-upload :custom-request="handleUpload" :show-file-list="false" accept="image/*">
+          <a-button type="primary" :loading="uploading">
+            <template #icon><icon-upload /></template>
+            {{ t('content.image.upload') }}
+          </a-button>
+        </a-upload>
+      </template>
+    </ProTable>
   </div>
 </template>

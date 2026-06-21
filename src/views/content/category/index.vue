@@ -5,14 +5,34 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { fetchGetCategoryList, fetchCreateCategory, fetchDeleteCategory } from '@/api/content'
+import ProTable from '@/components/ProTable/index.vue'
+import type { SearchField, ProTableColumn } from '@/components/ProTable/types'
 
 const { t } = useI18n()
 
-const searchParams = reactive({ categoryName: '' })
+const searchFields: SearchField[] = [
+  {
+    field: 'categoryName',
+    label: t('content.category.columns.categoryName'),
+    type: 'input',
+    placeholder: t('table.searchBar.searchInputPlaceholder'),
+  },
+]
+
+const columns: ProTableColumn[] = [
+  { title: t('content.category.columns.categoryName'), dataIndex: 'categoryName', width: 160 },
+  { title: t('content.category.columns.description'), dataIndex: 'description' },
+  { title: t('content.category.columns.articleCount'), dataIndex: 'articleCount', width: 100 },
+  { title: t('content.category.columns.enabled'), dataIndex: 'enabled', width: 100 },
+  { title: t('content.category.columns.createTime'), dataIndex: 'createTime', width: 180 },
+]
+
 const tableData = ref<Api.Content.CategoryListItem[]>([])
 const loading = ref(false)
-const pagination = reactive({ current: 1, size: 10, total: 0 })
+const pagination = reactive({ current: 1, pageSize: 10, total: 0 })
+const searchParams = reactive({ categoryName: '' })
 
+// 新增弹窗
 const showAddModal = ref(false)
 const newCategory = reactive({ categoryName: '', description: '' })
 const adding = ref(false)
@@ -22,7 +42,7 @@ async function fetchData() {
   try {
     const params: Api.Content.CategorySearchParams = {
       current: pagination.current,
-      size: pagination.size,
+      size: pagination.pageSize,
     }
     if (searchParams.categoryName) params.categoryName = searchParams.categoryName
     const res = await fetchGetCategoryList(params)
@@ -49,12 +69,16 @@ function handlePageChange(current: number) {
 }
 
 function handlePageSizeChange(size: number) {
-  pagination.size = size
+  pagination.pageSize = size
   pagination.current = 1
   fetchData()
 }
 
-async function handleAdd() {
+function handleAdd() {
+  showAddModal.value = true
+}
+
+async function handleAddConfirm() {
   if (!newCategory.categoryName.trim()) return
   adding.value = true
   try {
@@ -71,9 +95,9 @@ async function handleAdd() {
   }
 }
 
-async function handleDelete(id: number) {
+async function handleDelete(row: Record<string, any>) {
   try {
-    await fetchDeleteCategory(id)
+    await fetchDeleteCategory(row.categoryId)
     fetchData()
   } catch {
     // ignore
@@ -87,110 +111,41 @@ onMounted(() => {
 
 <template>
   <div class="content-category-page">
-    <div class="mb-4 flex items-center justify-between">
-      <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-100">
-        {{ t('content.category.title') }}
-      </h2>
-      <a-button type="primary" @click="showAddModal = true">
-        <template #icon><icon-plus /></template>
-        {{ t('content.category.addCategory') }}
-      </a-button>
-    </div>
+    <ProTable
+      :title="t('content.category.title')"
+      :columns="columns"
+      :data="tableData"
+      :loading="loading"
+      :pagination="pagination"
+      :search-fields="searchFields"
+      :search-model="searchParams"
+      :add-text="t('content.category.addCategory')"
+      :row-key="'categoryId'"
+      @search="handleSearch"
+      @reset="handleReset"
+      @add="handleAdd"
+      @delete="handleDelete"
+      @page-change="handlePageChange"
+      @page-size-change="handlePageSizeChange"
+    >
+      <!-- enabled 列：状态标签 -->
+      <template #column-enabled="{ record }">
+        <a-tag :color="record.enabled ? 'green' : 'red'">
+          {{
+            record.enabled
+              ? t('content.category.status.enabled')
+              : t('content.category.status.disabled')
+          }}
+        </a-tag>
+      </template>
+    </ProTable>
 
-    <a-card class="mb-4" :bordered="false">
-      <a-form :model="searchParams" layout="inline" @submit="handleSearch">
-        <a-form-item field="categoryName" :label="t('content.category.columns.categoryName')">
-          <a-input
-            v-model="searchParams.categoryName"
-            :placeholder="t('table.searchBar.searchInputPlaceholder')"
-            allow-clear
-            style="width: 200px"
-          />
-        </a-form-item>
-        <a-form-item>
-          <a-space>
-            <a-button type="primary" html-type="submit">
-              <template #icon><icon-search /></template>
-              {{ t('table.searchBar.search') }}
-            </a-button>
-            <a-button @click="handleReset">{{ t('table.searchBar.reset') }}</a-button>
-          </a-space>
-        </a-form-item>
-      </a-form>
-    </a-card>
-
-    <a-card :bordered="false">
-      <a-table
-        :data="tableData"
-        :loading="loading"
-        :pagination="{
-          current: pagination.current,
-          pageSize: pagination.size,
-          total: pagination.total,
-          showTotal: true,
-          showPageSize: true,
-          pageSizeOptions: [10, 20, 50],
-          onChange: handlePageChange,
-          onPageSizeChange: handlePageSizeChange,
-        }"
-        :row-key="'categoryId'"
-        stripe
-      >
-        <template #columns>
-          <a-table-column title="#" :width="60">
-            <template #cell="{ rowIndex }">
-              {{ (pagination.current - 1) * pagination.size + rowIndex + 1 }}
-            </template>
-          </a-table-column>
-          <a-table-column
-            :title="t('content.category.columns.categoryName')"
-            data-index="categoryName"
-            :width="160"
-          />
-          <a-table-column
-            :title="t('content.category.columns.description')"
-            data-index="description"
-          />
-          <a-table-column
-            :title="t('content.category.columns.articleCount')"
-            data-index="articleCount"
-            :width="100"
-          />
-          <a-table-column :title="t('content.category.columns.enabled')" :width="100">
-            <template #cell="{ record }">
-              <a-tag :color="record.enabled ? 'green' : 'red'">
-                {{
-                  record.enabled
-                    ? t('content.category.status.enabled')
-                    : t('content.category.status.disabled')
-                }}
-              </a-tag>
-            </template>
-          </a-table-column>
-          <a-table-column
-            :title="t('content.category.columns.createTime')"
-            data-index="createTime"
-            :width="180"
-          />
-          <a-table-column :title="t('content.category.columns.action')" :width="100" fixed="right">
-            <template #cell="{ record }">
-              <a-popconfirm :content="t('common.tips')" @ok="handleDelete(record.categoryId)">
-                <a-button type="text" size="small" status="danger">
-                  <template #icon><icon-delete /></template>
-                  {{ t('table.delete') }}
-                </a-button>
-              </a-popconfirm>
-            </template>
-          </a-table-column>
-        </template>
-      </a-table>
-    </a-card>
-
+    <!-- 新增分类弹窗 -->
     <a-modal
       :visible="showAddModal"
       :title="t('content.category.addCategory')"
       @cancel="showAddModal = false"
-      @before-ok="handleAdd"
+      @before-ok="handleAddConfirm"
     >
       <a-form :model="newCategory" layout="vertical">
         <a-form-item

@@ -5,13 +5,32 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { fetchGetTagList, fetchCreateTag, fetchDeleteTag } from '@/api/content'
+import ProTable from '@/components/ProTable/index.vue'
+import type { SearchField, ProTableColumn } from '@/components/ProTable/types'
 
 const { t } = useI18n()
 
-const searchParams = reactive({ tagName: '' })
+const searchFields: SearchField[] = [
+  {
+    field: 'tagName',
+    label: t('content.tag.columns.tagName'),
+    type: 'input',
+    placeholder: t('table.searchBar.searchInputPlaceholder'),
+  },
+]
+
+const columns: ProTableColumn[] = [
+  { title: t('content.tag.columns.tagName'), dataIndex: 'tagName' },
+  { title: t('content.tag.columns.articleCount'), dataIndex: 'articleCount', width: 100 },
+  { title: t('content.tag.columns.createTime'), dataIndex: 'createTime', width: 180 },
+]
+
 const tableData = ref<Api.Content.TagListItem[]>([])
 const loading = ref(false)
-const pagination = reactive({ current: 1, size: 10, total: 0 })
+const pagination = reactive({ current: 1, pageSize: 10, total: 0 })
+const searchParams = reactive({ tagName: '' })
+
+// 新增标签
 const newTagName = ref('')
 const adding = ref(false)
 
@@ -20,7 +39,7 @@ async function fetchData() {
   try {
     const params: Api.Content.TagSearchParams = {
       current: pagination.current,
-      size: pagination.size,
+      size: pagination.pageSize,
     }
     if (searchParams.tagName) params.tagName = searchParams.tagName
     const res = await fetchGetTagList(params)
@@ -47,7 +66,7 @@ function handlePageChange(current: number) {
 }
 
 function handlePageSizeChange(size: number) {
-  pagination.size = size
+  pagination.pageSize = size
   pagination.current = 1
   fetchData()
 }
@@ -64,9 +83,9 @@ async function handleAdd() {
   }
 }
 
-async function handleDelete(id: number) {
+async function handleDelete(row: Record<string, any>) {
   try {
-    await fetchDeleteTag(id)
+    await fetchDeleteTag(row.tagId)
     fetchData()
   } catch {
     // ignore
@@ -80,12 +99,7 @@ onMounted(() => {
 
 <template>
   <div class="content-tag-page">
-    <div class="mb-4 flex items-center justify-between">
-      <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-100">
-        {{ t('content.tag.title') }}
-      </h2>
-    </div>
-
+    <!-- 新增标签栏（在 ProTable 外部，因为样式独立） -->
     <a-card class="mb-4" :bordered="false">
       <a-space>
         <a-input
@@ -100,76 +114,26 @@ onMounted(() => {
       </a-space>
     </a-card>
 
-    <a-card :bordered="false">
-      <a-form :model="searchParams" layout="inline" @submit="handleSearch" class="mb-4">
-        <a-form-item field="tagName" :label="t('content.tag.columns.tagName')">
-          <a-input
-            v-model="searchParams.tagName"
-            :placeholder="t('table.searchBar.searchInputPlaceholder')"
-            allow-clear
-            style="width: 200px"
-          />
-        </a-form-item>
-        <a-form-item>
-          <a-space>
-            <a-button type="primary" html-type="submit">
-              <template #icon><icon-search /></template>
-              {{ t('table.searchBar.search') }}
-            </a-button>
-            <a-button @click="handleReset">{{ t('table.searchBar.reset') }}</a-button>
-          </a-space>
-        </a-form-item>
-      </a-form>
-
-      <a-table
-        :data="tableData"
-        :loading="loading"
-        :pagination="{
-          current: pagination.current,
-          pageSize: pagination.size,
-          total: pagination.total,
-          showTotal: true,
-          showPageSize: true,
-          pageSizeOptions: [10, 20, 50],
-          onChange: handlePageChange,
-          onPageSizeChange: handlePageSizeChange,
-        }"
-        :row-key="'tagId'"
-        stripe
-      >
-        <template #columns>
-          <a-table-column title="#" :width="60">
-            <template #cell="{ rowIndex }">
-              {{ (pagination.current - 1) * pagination.size + rowIndex + 1 }}
-            </template>
-          </a-table-column>
-          <a-table-column :title="t('content.tag.columns.tagName')" data-index="tagName">
-            <template #cell="{ record }">
-              <a-tag color="arcoblue">{{ record.tagName }}</a-tag>
-            </template>
-          </a-table-column>
-          <a-table-column
-            :title="t('content.tag.columns.articleCount')"
-            data-index="articleCount"
-            :width="100"
-          />
-          <a-table-column
-            :title="t('content.tag.columns.createTime')"
-            data-index="createTime"
-            :width="180"
-          />
-          <a-table-column :title="t('content.tag.columns.action')" :width="100" fixed="right">
-            <template #cell="{ record }">
-              <a-popconfirm :content="t('common.tips')" @ok="handleDelete(record.tagId)">
-                <a-button type="text" size="small" status="danger">
-                  <template #icon><icon-delete /></template>
-                  {{ t('table.delete') }}
-                </a-button>
-              </a-popconfirm>
-            </template>
-          </a-table-column>
-        </template>
-      </a-table>
-    </a-card>
+    <ProTable
+      :columns="columns"
+      :data="tableData"
+      :loading="loading"
+      :pagination="pagination"
+      :search-fields="searchFields"
+      :search-model="searchParams"
+      :row-key="'tagId'"
+      :show-add="false"
+      :show-index="true"
+      @search="handleSearch"
+      @reset="handleReset"
+      @delete="handleDelete"
+      @page-change="handlePageChange"
+      @page-size-change="handlePageSizeChange"
+    >
+      <!-- tagName 列：彩色标签 -->
+      <template #column-tagName="{ record }">
+        <a-tag color="arcoblue">{{ record.tagName }}</a-tag>
+      </template>
+    </ProTable>
   </div>
 </template>

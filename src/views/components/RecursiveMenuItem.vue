@@ -1,6 +1,10 @@
 ﻿<template>
   <!-- 有子菜单：渲染 a-sub-menu -->
-  <a-sub-menu v-if="item.children?.length" :key="item.path" :title="t(item.meta?.title || '')">
+  <a-sub-menu
+    v-if="item.children?.length"
+    :key="`submenu-${item.path}`"
+    :title="t(item.meta?.title || '')"
+  >
     <template #icon>
       <ZhaoIcon v-if="item.meta?.icon" :icon="item.meta.icon" />
     </template>
@@ -9,7 +13,7 @@
     </template>
   </a-sub-menu>
   <!-- 叶子节点 -->
-  <a-menu-item v-else :key="item.path">
+  <a-menu-item v-else :key="`menuitem-${item.path}`">
     <template #icon>
       <ZhaoIcon v-if="item.meta?.icon" :icon="item.meta.icon" />
     </template>

@@ -272,24 +272,26 @@ onMounted(() => {
         <!-- ── Double-Bezel 嵌套架构 ─────────────────────
           外层 Shell：带半透明背景 + 圆角
         -->
-        <div class="w-full max-w-[440px] rounded-[2rem] bg-white/5 p-2 ring-1 ring-white/10">
-          <!-- 内层 Core：纯白背景，圆角 = 外层圆角 - padding -->
+        <div
+          class="w-full max-w-[440px] rounded-[calc(var(--custom-radius,2rem)+0.5rem)] bg-white/5 p-2 ring-1 ring-white/10"
+        >
+          <!-- 内层 Core：主题自适应背景，圆角 = 外层圆角 - padding -->
           <div
-            class="rounded-[calc(2rem-0.375rem)] bg-white px-8 py-10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)] sm:px-10 sm:py-12"
+            class="rounded-[var(--custom-radius,2rem)] bg-[var(--color-bg-1)] px-8 py-10 sm:px-10 sm:py-12"
           >
             <!-- ── 欢迎文字 ───────────────────────── -->
             <div class="mb-8 text-center">
-              <h2 class="mb-2 text-2xl font-bold text-gray-900 sm:text-3xl">
+              <h2 class="mb-2 text-2xl font-bold text-[var(--color-text-1)] sm:text-3xl">
                 {{ t('login.title') }}
               </h2>
-              <p class="text-sm text-gray-500 sm:text-base">
+              <p class="text-sm text-[var(--color-text-2)] sm:text-base">
                 {{ t('login.subTitle') }}
               </p>
             </div>
 
             <!-- ── 快速选择账号（开发用） ──────────── -->
             <div class="mb-6 flex items-center gap-3">
-              <span class="shrink-0 text-xs font-medium text-gray-400">
+              <span class="shrink-0 text-xs font-medium text-[var(--color-text-3)]">
                 {{ t('login.quickSelect') }}
               </span>
               <a-select
@@ -330,7 +332,7 @@ onMounted(() => {
                   <template #prefix>
                     <!-- Phone / User 图标（超细线条） -->
                     <svg
-                      class="h-4 w-4 text-gray-400"
+                      class="h-4 w-4 text-[var(--color-text-3)]"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
@@ -356,7 +358,7 @@ onMounted(() => {
                   <template #prefix>
                     <!-- Lock 图标 -->
                     <svg
-                      class="h-4 w-4 text-gray-400"
+                      class="h-4 w-4 text-[var(--color-text-3)]"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
@@ -408,7 +410,7 @@ onMounted(() => {
             </a-form>
 
             <!-- ── 注册入口 ───────────────────────── -->
-            <div class="mt-8 text-center text-sm text-gray-400">
+            <div class="mt-8 text-center text-sm text-[var(--color-text-3)]">
               {{ t('login.noAccount') }}
               <a-link class="text-sm font-medium !no-underline hover:!underline" :hoverable="false">
                 {{ t('login.register') }}

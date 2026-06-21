@@ -25,7 +25,7 @@ export const globalComponentsConfig: GlobalComponentConfig[] = [
     name: '设置面板',
     key: 'settings-panel',
     component: defineAsyncComponent(
-      () => import('@/components/core/layouts/zhao-settings-panel/index.vue'),
+      () => import('@/components/layouts/zhao-settings-panel/index.vue'),
     ),
     enabled: true,
   },
@@ -33,7 +33,7 @@ export const globalComponentsConfig: GlobalComponentConfig[] = [
     name: '全局搜索',
     key: 'global-search',
     component: defineAsyncComponent(
-      () => import('@/components/core/layouts/zhao-global-search/index.vue'),
+      () => import('@/components/layouts/zhao-global-search/index.vue'),
     ),
     enabled: true,
   },
@@ -41,7 +41,7 @@ export const globalComponentsConfig: GlobalComponentConfig[] = [
     name: '锁屏',
     key: 'screen-lock',
     component: defineAsyncComponent(
-      () => import('@/components/core/layouts/zhao-screen-lock/index.vue'),
+      () => import('@/components/layouts/zhao-screen-lock/index.vue'),
     ),
     enabled: true,
   },
@@ -49,7 +49,7 @@ export const globalComponentsConfig: GlobalComponentConfig[] = [
     name: '聊天窗口',
     key: 'chat-window',
     component: defineAsyncComponent(
-      () => import('@/components/core/layouts/zhao-chat-window/index.vue'),
+      () => import('@/components/layouts/zhao-chat-window/index.vue'),
     ),
     enabled: true,
   },
@@ -57,15 +57,7 @@ export const globalComponentsConfig: GlobalComponentConfig[] = [
     name: '礼花效果',
     key: 'fireworks-effect',
     component: defineAsyncComponent(
-      () => import('@/components/core/layouts/zhao-fireworks-effect/index.vue'),
-    ),
-    enabled: true,
-  },
-  {
-    name: '水印效果',
-    key: 'watermark',
-    component: defineAsyncComponent(
-      () => import('@/components/core/others/zhao-watermark/index.vue'),
+      () => import('@/components/layouts/zhao-fireworks-effect/index.vue'),
     ),
     enabled: true,
   },

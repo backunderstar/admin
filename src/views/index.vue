@@ -172,9 +172,9 @@ import { MenuTypeEnum } from '@/enums/appEnum'
 import AppConfig from '@/config'
 import { useAutoLayoutHeight } from '@/hooks/core/useLayoutHeight'
 import RecursiveMenuItem from '@/views/components/RecursiveMenuItem.vue'
-import ZhaoHeaderBar from '@/components/core/layouts/zhao-header-bar/index.vue'
-import ZhaoPageContent from '@/components/core/layouts/zhao-page-content/index.vue'
-import ZhaoGlobalComponent from '@/components/core/layouts/zhao-global-component/index.vue'
+import ZhaoHeaderBar from '@/components/layouts/zhao-header-bar/index.vue'
+import ZhaoPageContent from '@/components/layouts/zhao-page-content/index.vue'
+import ZhaoGlobalComponent from '@/components/layouts/zhao-global-component/index.vue'
 import type { AppRouteRecord } from '@/types/router'
 import ZhaoIcon from '@/components/icons/ZhaoIcon.vue'
 
@@ -364,6 +364,7 @@ useAutoLayoutHeight()
 .fade-leave-active {
   transition: opacity 0.2s ease;
 }
+
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
@@ -374,6 +375,7 @@ useAutoLayoutHeight()
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
+
 .scrollbar-none::-webkit-scrollbar {
   display: none;
 }

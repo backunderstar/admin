@@ -31,7 +31,7 @@ import { useRoute } from 'vue-router'
 import { useSettingStore } from '@/store/modules/setting'
 import { useWorktabStore } from '@/store/modules/worktab'
 import { ContainerWidthEnum } from '@/enums/appEnum'
-import ZhaoWorkTab from '@/components/core/layouts/zhao-work-tab/index.vue'
+import ZhaoWorkTab from '@/components/layouts/zhao-work-tab/index.vue'
 
 defineOptions({ name: 'ZhaoPageContent' })
 

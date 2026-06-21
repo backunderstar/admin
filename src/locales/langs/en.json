@@ -36,6 +36,7 @@
     "tips": "Prompt",
     "cancel": "Cancel",
     "confirm": "Confirm",
+    "success": "Operation successful",
     "logOutTips": "Do you want to log out?"
   },
   "search": {
@@ -273,7 +274,8 @@
       "status": {
         "enabled": "Enabled",
         "disabled": "Disabled"
-      }
+      },
+      "addUser": "Add User"
     },
     "role": {
       "title": "Role Management",
@@ -396,6 +398,8 @@
       "expand": "Expand",
       "index": "Index"
     },
+    "add": "Add",
+    "action": "Action",
     "edit": "Edit",
     "delete": "Delete",
     "zebra": "Zebra",

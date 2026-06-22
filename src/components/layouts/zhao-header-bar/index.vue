@@ -87,7 +87,6 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useRouter } from 'vue-router'
 import ZhaoBreadcrumb from '@/components/layouts/zhao-breadcrumb/index.vue'
 import ZhaoHorizontalMenu from '@/components/layouts/zhao-menus/zhao-horizontal-menu/index.vue'
 import ZhaoMixedMenu from '@/components/layouts/zhao-menus/zhao-mixed-menu/index.vue'
@@ -112,7 +111,6 @@ defineEmits<{
   'toggle-menu': []
 }>()
 
-const router = useRouter()
 const { t, locale } = useI18n()
 const userStore = useUserStore()
 const settingStore = useSettingStore()
@@ -128,7 +126,6 @@ const shouldShowRefreshButton = headerBar.shouldShowRefreshButton
 const shouldShowBreadcrumb = headerBar.shouldShowBreadcrumb
 const shouldShowGlobalSearch = headerBar.shouldShowGlobalSearch
 const shouldShowFullscreen = headerBar.shouldShowFullscreen
-// const shouldShowNotification = headerBar.shouldShowNotification
 const shouldShowLanguage = headerBar.shouldShowLanguage
 const shouldShowSettings = headerBar.shouldShowSettings
 const shouldShowThemeToggle = headerBar.shouldShowThemeToggle

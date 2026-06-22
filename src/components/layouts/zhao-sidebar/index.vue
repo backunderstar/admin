@@ -122,7 +122,8 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute, watch } from 'vue-router'
+import { watch } from 'vue'
+import { useRoute } from 'vue-router'
 import RecursiveMenuItem from '@/views/components/RecursiveMenuItem.vue'
 import { findMenuItem, findParentPaths } from '@/utils/navigation/route'
 import type { AppRouteRecord } from '@/types/router'

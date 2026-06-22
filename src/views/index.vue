@@ -1,131 +1,26 @@
-﻿<template>
+<template>
   <div class="flex h-screen w-full overflow-hidden bg-(--color-fill-2)">
-    <!-- ═══════════════════════════════════════════
-       侧边栏
-     ═══════════════════════════════════════════ -->
-    <aside
+    <!-- 侧边栏 -->
+    <ZhaoSidebar
       v-if="showSidebar"
-      id="app-sidebar"
-      class="relative shrink-0 h-full overflow-hidden z-20 select-none rounded-lg"
-      :style="{ width: sidebarWidth }"
-    >
-      <!-- 双列模式 -->
-      <template v-if="isDualMenu">
-        <div class="flex h-full">
-          <!-- 左栏：一级图标 -->
-          <div
-            class="w-16 flex flex-col items-center py-3 border-r border-(--color-border)"
-            :style="{ background: getMenuTheme.background }"
-          >
-            <div
-              class="w-9 h-9 rounded-lg flex items-center justify-center cursor-pointer shrink-0"
-              :style="{ background: 'var(--theme-color, #5d87ff)' }"
-            >
-              <ZhaoIcon icon="ri:admin-line" class="text-white text-lg" />
-            </div>
-            <div class="flex-1 w-full mt-3 space-y-1 overflow-y-auto scrollbar-none">
-              <a-tooltip
-                v-for="item in topLevelMenus"
-                :key="item.path"
-                :content="item.meta?.title ? $t(item.meta.title) : ''"
-                placement="right"
-              >
-                <div
-                  class="flex flex-col items-center py-2.5 mx-1.5 rounded-lg cursor-pointer transition-colors"
-                  :class="
-                    activeFirstLevel === item.path
-                      ? 'text-(--color-primary-light-4) bg-(--color-fill-2)'
-                      : 'text-(--color-text-3) hover:text-(--color-text-2) hover:bg-(--color-fill-1)'
-                  "
-                  @click="setActiveFirstLevel(item)"
-                >
-                  <ZhaoIcon :icon="item.meta?.icon || 'ri:folder-line'" class="text-xl" />
-                </div>
-              </a-tooltip>
-            </div>
-          </div>
-          <!-- 右栏：子菜单 -->
-          <div
-            v-show="dualMenuShowText"
-            class="flex-1 overflow-y-auto scrollbar-none py-3"
-            :style="{ background: getMenuTheme.background }"
-          >
-            <a-menu
-              :selected-keys="[route.path]"
-              mode="vertical"
-              :collapsed="false"
-              :accordion="settingStore.uniqueOpened"
-              @menu-item-click="onMenuItemClick"
-            >
-              <template v-for="item in currentChildren" :key="item.path">
-                <RecursiveMenuItem :item="item" />
-              </template>
-            </a-menu>
-          </div>
-        </div>
-      </template>
+      :is-dual-menu="isDualMenu"
+      :menu-open="menuOpen"
+      :sidebar-width="sidebarWidth"
+      :menu-theme="getMenuTheme"
+      :top-level-menus="menuStore.menuList"
+      :current-children="currentChildren"
+      :dual-menu-show-text="dualMenuShowText"
+      v-model:open-keys="openKeys"
+      v-model:active-first-level="activeFirstLevel"
+      :menu-list="menuStore.menuList"
+      :unique-opened="settingStore.uniqueOpened"
+      :system-name="systemInfo.name"
+      @menu-select="nav.navigateByKey($event, { closeMobile: closeMobileSidebar })"
+      @toggle-collapse="settingStore.setMenuOpen(!menuOpen)"
+      @home="goHome"
+    />
 
-      <!-- 标准侧边栏 -->
-      <template v-else>
-        <div
-          class="flex flex-col h-full border-r border-(--color-border)"
-          :style="{ background: getMenuTheme.background }"
-        >
-          <!-- Logo -->
-          <div
-            class="flex items-center justify-center h-16 shrink-0 cursor-pointer"
-            @click="goHome"
-          >
-            <div
-              class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-              :style="{ background: 'var(--theme-color, #5d87ff)' }"
-            >
-              <ZhaoIcon icon="ri:admin-line" class="text-white text-base" />
-            </div>
-            <span
-              class="text-base font-bold whitespace-nowrap overflow-hidden transition-all duration-250"
-              :class="menuOpen ? 'max-w-50 opacity-100 ml-3' : 'max-w-0 opacity-0 ml-0'"
-              :style="{ color: getMenuTheme.systemNameColor }"
-            >
-              {{ systemInfo.name }}
-            </span>
-          </div>
-          <!-- 菜单 -->
-          <div
-            class="flex-1 overflow-y-auto scrollbar-none py-2"
-            :class="{ 'flex justify-center': !menuOpen }"
-          >
-            <a-menu
-              :selected-keys="[route.path]"
-              v-model:open-keys="openKeys"
-              mode="vertical"
-              :collapsed="!menuOpen"
-              :accordion="settingStore.uniqueOpened"
-              @menu-item-click="onMenuItemClick"
-            >
-              <template v-for="item in menuStore.menuList" :key="item.path">
-                <RecursiveMenuItem :item="item" />
-              </template>
-            </a-menu>
-          </div>
-          <!-- 折叠按钮 -->
-          <div
-            class="shrink-0 h-10 flex items-center justify-center cursor-pointer border-t border-(--color-border) text-(--color-text-3) hover:text-(--color-text-1) transition-colors"
-            :style="{ background: getMenuTheme.background }"
-            @click="settingStore.setMenuOpen(!menuOpen)"
-          >
-            <ZhaoIcon
-              :icon="menuOpen ? 'ri:menu-fold-line' : 'ri:menu-unfold-line'"
-              class="text-lg"
-            />
-          </div>
-        </div>
-      </template>
-    </aside>
-
-    <!-- ═══════════════════════════════════════════
-       主内容区
-     ═══════════════════════════════════════════ -->
+    <!-- 主内容区 -->
     <main
       id="app-main"
       class="flex-1 flex flex-col h-full min-w-0 overflow-hidden bg-(--color-fill-2)"
@@ -162,31 +57,27 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useSettingStore } from '@/store/modules/setting'
 import { useMenuStore } from '@/store/modules/menu'
-import { useWorktabStore } from '@/store/modules/worktab'
-import { useI18n } from 'vue-i18n'
 import { MenuTypeEnum } from '@/enums/appEnum'
 import AppConfig from '@/config'
 import { useAutoLayoutHeight } from '@/hooks/core/useLayoutHeight'
-import RecursiveMenuItem from '@/views/components/RecursiveMenuItem.vue'
+import { useMenuNavigation } from '@/hooks/core/useMenuNavigation'
+import { findMenuItem } from '@/utils/navigation/route'
+import ZhaoSidebar from '@/components/layouts/zhao-sidebar/index.vue'
 import ZhaoHeaderBar from '@/components/layouts/zhao-header-bar/index.vue'
 import ZhaoPageContent from '@/components/layouts/zhao-page-content/index.vue'
 import ZhaoGlobalComponent from '@/components/layouts/zhao-global-component/index.vue'
 import type { AppRouteRecord } from '@/types/router'
-import { findMenuItem, findParentPaths } from '@/utils/navigation/route'
-import ZhaoIcon from '@/components/icons/ZhaoIcon.vue'
 
 defineOptions({ name: 'AppLayout' })
 
 const router = useRouter()
 const route = useRoute()
-const { t } = useI18n()
 const settingStore = useSettingStore()
 const menuStore = useMenuStore()
-const worktabStore = useWorktabStore()
 
 const systemInfo = AppConfig.systemInfo
 
@@ -209,68 +100,20 @@ const sidebarWidth = computed(() => {
   return `${settingStore.menuOpenWidth}px`
 })
 
-// ── 展开的菜单（路由变化时自动展开对应父级） ──
+// ── 展开的菜单（由 ZhaoSidebar 通过 v-model:open-keys 维护） ──
 const openKeys = ref<string[]>([])
 
-// 路由变化时，确保当前路由的父级始终展开
-watch(
-  () => route.path,
-  (path) => {
-    const parentKeys = findParentPaths(menuStore.menuList, path)
-    // 只补充缺失的父级，不关闭用户手动展开的菜单
-    for (const key of parentKeys) {
-      if (!openKeys.value.includes(key)) {
-        openKeys.value.push(key)
-      }
-    }
-  },
-  { immediate: true },
-)
-
 // ── 一级菜单图标（双列模式） ──
-const topLevelMenus = computed(() => menuStore.menuList)
 const activeFirstLevel = ref('')
 
 const currentChildren = computed(() => {
   if (!activeFirstLevel.value) return []
-  const found = findMenuItem(topLevelMenus.value, activeFirstLevel.value)
+  const found = findMenuItem(menuStore.menuList, activeFirstLevel.value)
   return found?.children || []
 })
 
-const setActiveFirstLevel = (item: AppRouteRecord) => {
-  activeFirstLevel.value = item.path || ''
-  if (item.children?.length) {
-    const first = item.children[0]
-    if (first) onMenuItemClick(first.path || '')
-    else if (item.path) onMenuItemClick(item.path)
-  } else if (item.path) {
-    onMenuItemClick(item.path)
-  }
-}
-
-// ── 菜单点击 ──
-const onMenuItemClick = (key: string) => {
-  const item = findMenuItem(menuStore.menuList, key)
-  if (!item) {
-    router.push(key)
-    return
-  }
-  const path = item.meta?.link || item.path || key
-  router.push(path)
-  worktabStore.openTab({
-    path,
-    name: item.name as string,
-    title: item.meta?.title || '',
-    icon: item.meta?.icon,
-    keepAlive: item.meta?.keepAlive ?? true,
-    fixedTab: item.meta?.fixedTab ?? false,
-  })
-  closeMobileSidebar()
-}
-
 // ── 首页跳转 ──
 const goHome = () => {
-  // menuStore.homePath may not be declared in the store typing
   const home = (menuStore as any).homePath ?? '/'
   if (home) router.push(home)
 }
@@ -307,35 +150,14 @@ onBeforeUnmount(() => {
   if (resizeHandler) window.removeEventListener('resize', resizeHandler)
 })
 
-// ── 双列模式激活 ──
-watch(
-  () => route.path,
-  (path) => {
-    if (path && isDualMenu.value) {
-      for (const item of topLevelMenus.value) {
-        if (item.path && path.startsWith(item.path)) {
-          activeFirstLevel.value = item.path
-          return
-        }
-      }
-    }
-  },
-  { immediate: true },
-)
+// ── 导航 ──
+const nav = useMenuNavigation()
 
 // ── 自动布局高度 ──
 useAutoLayoutHeight()
 </script>
 
 <style scoped>
-/* 侧边栏宽度过渡 */
-#app-sidebar {
-  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* 折叠菜单居中：保持 Arco 默认 48px 宽度，由父容器 flex 居中 */
-
-/* Logo 文字渐隐 */
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.2s ease;
@@ -344,15 +166,5 @@ useAutoLayoutHeight()
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
-}
-
-/* 隐藏滚动条 */
-.scrollbar-none {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.scrollbar-none::-webkit-scrollbar {
-  display: none;
 }
 </style>

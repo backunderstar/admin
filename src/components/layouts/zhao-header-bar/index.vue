@@ -1,27 +1,20 @@
-﻿<template>
+<template>
   <div class="flex items-center justify-between h-full">
     <!-- 左半部分 -->
     <div class="flex items-center gap-2 min-w-0">
       <!-- 菜单折叠/展开按钮 -->
-      <div
+      <ZhaoIconButton
         v-if="shouldShowMenuButton && !isTopMenu"
-        class="flex items-center justify-center w-8 h-8 rounded-md cursor-pointer text-(--color-text-3) hover:text-(--color-text-1) hover:bg-(--color-fill-2) transition-colors"
+        :icon="settingStore.menuOpen ? 'ri:menu-fold-line' : 'ri:menu-unfold-line'"
         @click="$emit('toggle-menu')"
-      >
-        <ZhaoIcon
-          :icon="settingStore.menuOpen ? 'ri:menu-fold-line' : 'ri:menu-unfold-line'"
-          class="text-lg"
-        />
-      </div>
+      />
 
       <!-- 刷新按钮 -->
-      <div
+      <ZhaoIconButton
         v-if="shouldShowRefreshButton"
-        class="flex items-center justify-center w-8 h-8 rounded-md cursor-pointer text-(--color-text-3) hover:text-(--color-text-1) hover:bg-(--color-fill-2) transition-colors"
+        icon="ri:refresh-line"
         @click="common.refresh"
-      >
-        <ZhaoIcon icon="ri:refresh-line" class="text-lg" />
-      </div>
+      />
 
       <!-- 面包屑 -->
       <ZhaoBreadcrumb v-if="shouldShowBreadcrumb" />
@@ -34,7 +27,7 @@
         v-if="isTopMenu"
         :menu-list="menuStore.menuList"
         class="mr-4"
-        @select="onMenuSelect"
+        @select="nav.navigateByItem"
       />
 
       <!-- 混合菜单（TOP_LEFT 模式） -->
@@ -42,29 +35,22 @@
         v-if="isTopLeftMenu"
         :menu-list="menuStore.menuList"
         class="mr-4"
-        @select="onMenuSelect"
+        @select="nav.navigateByItem"
       />
 
       <!-- 全局搜索 -->
-      <div
+      <ZhaoIconButton
         v-if="shouldShowGlobalSearch"
-        class="flex items-center justify-center w-8 h-8 rounded-md cursor-pointer text-(--color-text-3) hover:text-(--color-text-1) hover:bg-(--color-fill-2) transition-colors"
+        icon="ri:search-line"
         @click="mittBus.emit('open-search')"
-      >
-        <ZhaoIcon icon="ri:search-line" class="text-lg" />
-      </div>
+      />
 
       <!-- 全屏 -->
-      <div
+      <ZhaoIconButton
         v-if="shouldShowFullscreen"
-        class="flex items-center justify-center w-8 h-8 rounded-md cursor-pointer text-(--color-text-3) hover:text-(--color-text-1) hover:bg-(--color-fill-2) transition-colors"
+        :icon="isFullscreen ? 'ri:fullscreen-exit-line' : 'ri:fullscreen-line'"
         @click="toggleFullscreen"
-      >
-        <ZhaoIcon
-          :icon="isFullscreen ? 'ri:fullscreen-exit-line' : 'ri:fullscreen-line'"
-          class="text-lg"
-        />
-      </div>
+      />
 
       <!-- 语言切换 -->
       <a-dropdown v-if="shouldShowLanguage" trigger="click" @select="onLanguageChange">
@@ -80,59 +66,21 @@
       </a-dropdown>
 
       <!-- 设置面板 -->
-      <div
+      <ZhaoIconButton
         v-if="shouldShowSettings"
-        class="flex items-center justify-center w-8 h-8 rounded-md cursor-pointer text-(--color-text-3) hover:text-(--color-text-1) hover:bg-(--color-fill-2) transition-colors"
+        icon="ri:settings-3-line"
         @click="mittBus.emit('open-settings')"
-      >
-        <ZhaoIcon icon="ri:settings-3-line" class="text-lg" />
-      </div>
+      />
 
       <!-- 主题切换 -->
-      <div
+      <ZhaoIconButton
         v-if="shouldShowThemeToggle"
-        class="flex items-center justify-center w-8 h-8 rounded-md cursor-pointer text-(--color-text-3) hover:text-(--color-text-1) hover:bg-(--color-fill-2) transition-colors"
+        :icon="settingStore.isDark ? 'ri:sun-line' : 'ri:moon-line'"
         @click="toggleTheme"
-      >
-        <ZhaoIcon :icon="settingStore.isDark ? 'ri:sun-line' : 'ri:moon-line'" class="text-lg" />
-      </div>
+      />
 
       <!-- 用户菜单 -->
-      <a-dropdown trigger="click" @select="onUserMenuSelect">
-        <div
-          class="flex items-center gap-2 ml-2 px-2 py-1 rounded-md cursor-pointer hover:bg-(--color-fill-2) transition-colors"
-        >
-          <div
-            class="w-7 h-7 rounded-full bg-(--theme-color,#5d87ff) flex items-center justify-center text-white text-xs font-medium"
-          >
-            {{ userAvatarText }}
-          </div>
-          <span class="text-sm text-(--color-text-1) hidden sm:inline">{{ userName }}</span>
-          <ZhaoIcon icon="ri:arrow-down-s-line" class="text-sm text-(--color-text-3)" />
-        </div>
-        <template #content>
-          <a-doption value="center">
-            <ZhaoIcon icon="ri:user-line" class="mr-2" />
-            {{ t('topBar.user.userCenter') }}
-          </a-doption>
-          <a-doption value="docs">
-            <ZhaoIcon icon="ri:file-text-line" class="mr-2" />
-            {{ t('topBar.user.docs') }}
-          </a-doption>
-          <a-doption value="github">
-            <ZhaoIcon icon="ri:github-line" class="mr-2" />
-            GitHub
-          </a-doption>
-          <a-doption divided value="lock">
-            <ZhaoIcon icon="ri:lock-line" class="mr-2" />
-            {{ t('topBar.user.lockScreen') }}
-          </a-doption>
-          <a-doption value="logout">
-            <ZhaoIcon icon="ri:logout-box-r-line" class="mr-2" />
-            {{ t('topBar.user.logout') }}
-          </a-doption>
-        </template>
-      </a-dropdown>
+      <ZhaoUserDropdown />
     </div>
   </div>
 </template>
@@ -143,18 +91,19 @@ import { useRouter } from 'vue-router'
 import ZhaoBreadcrumb from '@/components/layouts/zhao-breadcrumb/index.vue'
 import ZhaoHorizontalMenu from '@/components/layouts/zhao-menus/zhao-horizontal-menu/index.vue'
 import ZhaoMixedMenu from '@/components/layouts/zhao-menus/zhao-mixed-menu/index.vue'
+import ZhaoIconButton from '@/components/layouts/zhao-icon-button/index.vue'
+import ZhaoUserDropdown from '@/components/layouts/zhao-user-dropdown/index.vue'
 import { useI18n } from 'vue-i18n'
 import { useUserStore } from '@/store/modules/user'
 import { useSettingStore } from '@/store/modules/setting'
 import { useMenuStore } from '@/store/modules/menu'
-import { useWorktabStore } from '@/store/modules/worktab'
 import { useHeaderBar } from '@/hooks/core/useHeaderBar'
 import { useCommon } from '@/hooks/core/useCommon'
 import { useTheme } from '@/hooks/core/useTheme'
+import { useMenuNavigation } from '@/hooks/core/useMenuNavigation'
 import { MenuTypeEnum, LanguageEnum, SystemThemeEnum } from '@/enums/appEnum'
-import { Message, Modal } from '@arco-design/web-vue'
+import { Message } from '@arco-design/web-vue'
 import mittBus from '@/utils/mitt'
-import type { AppRouteRecord } from '@/types/router'
 import ZhaoIcon from '@/components/icons/ZhaoIcon.vue'
 
 defineOptions({ name: 'ZhaoHeaderBar' })
@@ -168,10 +117,10 @@ const { t, locale } = useI18n()
 const userStore = useUserStore()
 const settingStore = useSettingStore()
 const menuStore = useMenuStore()
-const worktabStore = useWorktabStore()
 const common = useCommon()
 const headerBar = useHeaderBar()
 const { switchThemeStyles } = useTheme()
+const nav = useMenuNavigation()
 
 // ── 功能开关 ──
 const shouldShowMenuButton = headerBar.shouldShowMenuButton
@@ -187,12 +136,6 @@ const shouldShowThemeToggle = headerBar.shouldShowThemeToggle
 // ── 布局模式判断 ──
 const isTopMenu = computed(() => settingStore.menuType === MenuTypeEnum.TOP)
 const isTopLeftMenu = computed(() => settingStore.menuType === MenuTypeEnum.TOP_LEFT)
-
-// ── 用户信息 ──
-const userAvatarText = computed(() => {
-  return (userStore.info.userName || 'U').charAt(0).toUpperCase()
-})
-const userName = computed(() => userStore.info.userName || 'User')
 
 // ── 全屏 ──
 const isFullscreen = computed(() => !!document.fullscreenElement)
@@ -211,34 +154,6 @@ const onLanguageChange = (value: string | number | Record<string, any> | undefin
     userStore.setLanguage(value === 'zh' ? LanguageEnum.ZH : LanguageEnum.EN)
     Message.success(t('common.tips'))
   }
-}
-
-// ── 用户菜单 ──
-const onUserMenuSelect = (value: string | number | Record<string, any> | undefined) => {
-  if (value === 'logout') {
-    Modal.confirm({
-      title: t('common.tips'),
-      content: t('common.logOutTips'),
-      onOk: () => userStore.logOut(),
-    })
-  } else if (value === 'lock') {
-    userStore.setLockStatus(true)
-  }
-}
-
-// ── 菜单选中（来自 ArtHorizontalMenu / ArtMixedMenu） ──
-const onMenuSelect = (item: AppRouteRecord) => {
-  const path = item.meta?.link || item.path
-  if (!path) return
-  router.push(path)
-  worktabStore.openTab({
-    path,
-    name: item.name as string,
-    title: item.meta?.title || '',
-    icon: item.meta?.icon,
-    keepAlive: item.meta?.keepAlive ?? true,
-    fixedTab: item.meta?.fixedTab ?? false,
-  })
 }
 
 // ── 主题切换 ──

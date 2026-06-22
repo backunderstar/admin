@@ -1,11 +1,11 @@
 ﻿<template>
-  <div class="flex items-center justify-between h-full px-4">
+  <div class="flex items-center justify-between h-full">
     <!-- 左半部分 -->
     <div class="flex items-center gap-2 min-w-0">
       <!-- 菜单折叠/展开按钮 -->
       <div
         v-if="shouldShowMenuButton && !isTopMenu"
-        class="flex items-center justify-center w-8 h-8 rounded-md cursor-pointer text-[var(--color-text-3)] hover:text-[var(--color-text-1)] hover:bg-[var(--color-fill-2)] transition-colors"
+        class="flex items-center justify-center w-8 h-8 rounded-md cursor-pointer text-(--color-text-3) hover:text-(--color-text-1) hover:bg-(--color-fill-2) transition-colors"
         @click="$emit('toggle-menu')"
       >
         <ZhaoIcon
@@ -17,7 +17,7 @@
       <!-- 刷新按钮 -->
       <div
         v-if="shouldShowRefreshButton"
-        class="flex items-center justify-center w-8 h-8 rounded-md cursor-pointer text-[var(--color-text-3)] hover:text-[var(--color-text-1)] hover:bg-[var(--color-fill-2)] transition-colors"
+        class="flex items-center justify-center w-8 h-8 rounded-md cursor-pointer text-(--color-text-3) hover:text-(--color-text-1) hover:bg-(--color-fill-2) transition-colors"
         @click="common.refresh"
       >
         <ZhaoIcon icon="ri:refresh-line" class="text-lg" />
@@ -48,7 +48,7 @@
       <!-- 全局搜索 -->
       <div
         v-if="shouldShowGlobalSearch"
-        class="flex items-center justify-center w-8 h-8 rounded-md cursor-pointer text-[var(--color-text-3)] hover:text-[var(--color-text-1)] hover:bg-[var(--color-fill-2)] transition-colors"
+        class="flex items-center justify-center w-8 h-8 rounded-md cursor-pointer text-(--color-text-3) hover:text-(--color-text-1) hover:bg-(--color-fill-2) transition-colors"
         @click="mittBus.emit('open-search')"
       >
         <ZhaoIcon icon="ri:search-line" class="text-lg" />
@@ -57,7 +57,7 @@
       <!-- 全屏 -->
       <div
         v-if="shouldShowFullscreen"
-        class="flex items-center justify-center w-8 h-8 rounded-md cursor-pointer text-[var(--color-text-3)] hover:text-[var(--color-text-1)] hover:bg-[var(--color-fill-2)] transition-colors"
+        class="flex items-center justify-center w-8 h-8 rounded-md cursor-pointer text-(--color-text-3) hover:text-(--color-text-1) hover:bg-(--color-fill-2) transition-colors"
         @click="toggleFullscreen"
       >
         <ZhaoIcon
@@ -69,7 +69,7 @@
       <!-- 语言切换 -->
       <a-dropdown v-if="shouldShowLanguage" trigger="click" @select="onLanguageChange">
         <div
-          class="flex items-center justify-center w-8 h-8 rounded-md cursor-pointer text-[var(--color-text-3)] hover:text-[var(--color-text-1)] hover:bg-[var(--color-fill-2)] transition-colors"
+          class="flex items-center justify-center w-8 h-8 rounded-md cursor-pointer text-(--color-text-3) hover:text-(--color-text-1) hover:bg-(--color-fill-2) transition-colors"
         >
           <ZhaoIcon icon="ri:global-line" class="text-lg" />
         </div>
@@ -79,20 +79,10 @@
         </template>
       </a-dropdown>
 
-      <!-- 通知 -->
-      <div
-        v-if="shouldShowNotification"
-        class="flex items-center justify-center w-8 h-8 rounded-md cursor-pointer text-[var(--color-text-3)] hover:text-[var(--color-text-1)] hover:bg-[var(--color-fill-2)] transition-colors"
-      >
-        <a-badge :count="3" :dot="true">
-          <ZhaoIcon icon="ri:notification-line" class="text-lg" />
-        </a-badge>
-      </div>
-
       <!-- 设置面板 -->
       <div
         v-if="shouldShowSettings"
-        class="flex items-center justify-center w-8 h-8 rounded-md cursor-pointer text-[var(--color-text-3)] hover:text-[var(--color-text-1)] hover:bg-[var(--color-fill-2)] transition-colors"
+        class="flex items-center justify-center w-8 h-8 rounded-md cursor-pointer text-(--color-text-3) hover:text-(--color-text-1) hover:bg-(--color-fill-2) transition-colors"
         @click="mittBus.emit('open-settings')"
       >
         <ZhaoIcon icon="ri:settings-3-line" class="text-lg" />
@@ -101,7 +91,7 @@
       <!-- 主题切换 -->
       <div
         v-if="shouldShowThemeToggle"
-        class="flex items-center justify-center w-8 h-8 rounded-md cursor-pointer text-[var(--color-text-3)] hover:text-[var(--color-text-1)] hover:bg-[var(--color-fill-2)] transition-colors"
+        class="flex items-center justify-center w-8 h-8 rounded-md cursor-pointer text-(--color-text-3) hover:text-(--color-text-1) hover:bg-(--color-fill-2) transition-colors"
         @click="toggleTheme"
       >
         <ZhaoIcon :icon="settingStore.isDark ? 'ri:sun-line' : 'ri:moon-line'" class="text-lg" />
@@ -110,15 +100,15 @@
       <!-- 用户菜单 -->
       <a-dropdown trigger="click" @select="onUserMenuSelect">
         <div
-          class="flex items-center gap-2 ml-2 px-2 py-1 rounded-md cursor-pointer hover:bg-[var(--color-fill-2)] transition-colors"
+          class="flex items-center gap-2 ml-2 px-2 py-1 rounded-md cursor-pointer hover:bg-(--color-fill-2) transition-colors"
         >
           <div
-            class="w-7 h-7 rounded-full bg-[var(--theme-color,#5d87ff)] flex items-center justify-center text-white text-xs font-medium"
+            class="w-7 h-7 rounded-full bg-(--theme-color,#5d87ff) flex items-center justify-center text-white text-xs font-medium"
           >
             {{ userAvatarText }}
           </div>
-          <span class="text-sm text-[var(--color-text-1)] hidden sm:inline">{{ userName }}</span>
-          <ZhaoIcon icon="ri:arrow-down-s-line" class="text-sm text-[var(--color-text-3)]" />
+          <span class="text-sm text-(--color-text-1) hidden sm:inline">{{ userName }}</span>
+          <ZhaoIcon icon="ri:arrow-down-s-line" class="text-sm text-(--color-text-3)" />
         </div>
         <template #content>
           <a-doption value="center">
@@ -189,7 +179,7 @@ const shouldShowRefreshButton = headerBar.shouldShowRefreshButton
 const shouldShowBreadcrumb = headerBar.shouldShowBreadcrumb
 const shouldShowGlobalSearch = headerBar.shouldShowGlobalSearch
 const shouldShowFullscreen = headerBar.shouldShowFullscreen
-const shouldShowNotification = headerBar.shouldShowNotification
+// const shouldShowNotification = headerBar.shouldShowNotification
 const shouldShowLanguage = headerBar.shouldShowLanguage
 const shouldShowSettings = headerBar.shouldShowSettings
 const shouldShowThemeToggle = headerBar.shouldShowThemeToggle

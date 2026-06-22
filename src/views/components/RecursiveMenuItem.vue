@@ -13,7 +13,7 @@
     </template>
   </a-sub-menu>
   <!-- 叶子节点 -->
-  <a-menu-item v-else :key="`menuitem-${item.path}`">
+  <a-menu-item v-else :key="item.path">
     <template #icon>
       <ZhaoIcon v-if="item.meta?.icon" :icon="item.meta.icon" />
     </template>

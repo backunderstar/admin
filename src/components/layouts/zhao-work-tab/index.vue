@@ -1,13 +1,13 @@
 ﻿<template>
   <div
     v-if="worktabStore.hasOpenedTabs"
-    class="flex items-center border-b border-[var(--color-border)] bg-[var(--color-bg-2)] overflow-hidden"
+    class="flex items-center border-b border-(--color-border) bg-(--color-bg-2) overflow-hidden"
     style="height: 40px"
   >
     <!-- 左滚动按钮 -->
     <div
       v-show="canScrollLeft"
-      class="flex-shrink-0 flex items-center justify-center w-6 h-full cursor-pointer text-[var(--color-text-3)] hover:text-[var(--color-text-1)] hover:bg-[var(--color-fill-1)] transition-colors"
+      class="shrink-0 flex items-center justify-center w-6 h-full cursor-pointer text-(--color-text-3) hover:text-(--color-text-1) hover:bg-(--color-fill-1) transition-colors"
       @click="scrollTabs(-200)"
     >
       <ZhaoIcon icon="ri:arrow-left-s-line" />
@@ -21,28 +21,28 @@
       <div
         v-for="tab in worktabStore.opened"
         :key="tab.path"
-        class="tab-item flex items-center gap-1.5 px-3 h-8 mx-0.5 rounded-md cursor-pointer text-sm whitespace-nowrap transition-colors flex-shrink-0"
+        class="tab-item flex items-center gap-1.5 px-3 h-8 mx-0.5 rounded-md cursor-pointer text-sm whitespace-nowrap transition-colors shrink-0"
         :class="
           worktabStore.current.path === tab.path
-            ? 'tab-active bg-[var(--color-fill-2)] text-[var(--color-text-1)] font-medium'
-            : 'text-[var(--color-text-3)] hover:text-[var(--color-text-2)] hover:bg-[var(--color-fill-1)]'
+            ? 'tab-active bg-(--color-fill-2) text-(--color-text-1) font-medium'
+            : 'text-(--color-text-3) hover:text-(--color-text-2) hover:bg-(--color-fill-1)'
         "
         @click="switchTab(tab)"
         @contextmenu.prevent="onContextMenu($event, tab)"
       >
         <ZhaoIcon v-if="tab.icon" :icon="tab.icon" class="text-sm" />
-        <span class="truncate max-w-[120px]">{{ getTabTitle(tab) }}</span>
+        <span class="truncate max-w-30">{{ getTabTitle(tab) }}</span>
         <!-- 固定标签显示锁定图标 -->
         <ZhaoIcon
           v-if="tab.fixedTab"
           icon="ri:pushpin-line"
-          class="text-xs text-[var(--color-text-4)] flex-shrink-0"
+          class="text-xs text-(--color-text-4) shrink-0"
         />
         <!-- 可关闭标签的 × 按钮 -->
         <div
           v-else
-          class="flex items-center justify-center w-4 h-4 rounded-sm hover:bg-[var(--color-fill-3)] flex-shrink-0 opacity-0 group-hover:opacity-100"
-          :class="{ '!opacity-100': worktabStore.current.path === tab.path }"
+          class="flex items-center justify-center w-4 h-4 rounded-sm hover:bg-(--color-fill-3) shrink-0 opacity-0 group-hover:opacity-100"
+          :class="{ 'opacity-100!': worktabStore.current.path === tab.path }"
           @click.stop="worktabStore.removeTab(tab.path)"
         >
           <ZhaoIcon icon="ri:close-line" class="text-xs" />
@@ -53,7 +53,7 @@
     <!-- 右滚动按钮 -->
     <div
       v-show="canScrollRight"
-      class="flex-shrink-0 flex items-center justify-center w-6 h-full cursor-pointer text-[var(--color-text-3)] hover:text-[var(--color-text-1)] hover:bg-[var(--color-fill-1)] transition-colors"
+      class="shrink-0 flex items-center justify-center w-6 h-full cursor-pointer text-(--color-text-3) hover:text-(--color-text-1) hover:bg-(--color-fill-1) transition-colors"
       @click="scrollTabs(200)"
     >
       <ZhaoIcon icon="ri:arrow-right-s-line" />
@@ -239,13 +239,16 @@ const onContextMenuAction = (value: string | number | Record<string, any> | unde
 .tab-item {
   user-select: none;
 }
+
 .tab-item:hover .opacity-0 {
   opacity: 1;
 }
+
 .scrollbar-none {
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
+
 .scrollbar-none::-webkit-scrollbar {
   display: none;
 }
@@ -262,6 +265,7 @@ const onContextMenuAction = (value: string | number | Record<string, any> | unde
   border-radius: 6px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
 }
+
 .context-menu-item {
   display: flex;
   align-items: center;
@@ -273,6 +277,7 @@ const onContextMenuAction = (value: string | number | Record<string, any> | unde
     background 0.15s,
     color 0.15s;
 }
+
 .context-menu-item:hover {
   background: var(--color-fill-2);
   color: var(--color-text-1);

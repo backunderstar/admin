@@ -115,6 +115,8 @@ const paginationProps = computed<PaginationProps>(() => ({
   onPageSizeChange: (size: number) => emit('page-size-change', size),
 }))
 
+const safeColumns = computed(() => props.columns as Record<string, any>[])
+
 // ── 搜索相关 ──────────────────────────────────────────────
 const hasSearch = computed(() => props.searchFields.length > 0)
 
@@ -139,7 +141,7 @@ function calcIndex(rowIndex: number): number {
     ══════════════════════════════════════════════════════ -->
     <div class="pro-table-header mb-5">
       <div class="flex items-center justify-between">
-        <h2 v-if="title" class="text-lg font-semibold text-[var(--color-text-1)]">
+        <h2 v-if="title" class="text-lg font-semibold text-(--color-text-1)">
           {{ title }}
         </h2>
         <div v-else />
@@ -157,9 +159,7 @@ function calcIndex(rowIndex: number): number {
       搜索栏 — 浅层卡片（float 1），与表格形成层次堆叠
     ══════════════════════════════════════════════════════ -->
     <div v-if="hasSearch" class="pro-table-search mb-4">
-      <div
-        class="rounded-lg bg-[var(--color-bg-2)] px-6 py-5 shadow-sm ring-1 ring-[var(--color-border-2)]"
-      >
+      <div class="rounded-lg bg-(--color-bg-2) px-6 py-5 shadow-sm ring-1 ring-(--color-border-2)">
         <a-form :model="searchModel" layout="inline" @submit="onSearch">
           <template v-for="field in searchFields" :key="field.field">
             <a-form-item :field="field.field" :label="field.label">
@@ -205,7 +205,7 @@ function calcIndex(rowIndex: number): number {
       表格区域 — 主卡片（float 2），阴影更深，与搜索栏区分
     ══════════════════════════════════════════════════════ -->
     <div
-      class="pro-table-body rounded-lg bg-[var(--color-bg-2)] shadow-sm ring-1 ring-[var(--color-border-2)]"
+      class="pro-table-body rounded-lg bg-(--color-bg-2) shadow-sm ring-1 ring-(--color-border-2)"
     >
       <slot name="table-top" />
 
@@ -229,16 +229,8 @@ function calcIndex(rowIndex: number): number {
           </a-table-column>
 
           <!-- 数据列 -->
-          <template v-for="col in columns" :key="col.dataIndex || col.slotName">
-            <a-table-column
-              :title="col.title"
-              :data-index="col.dataIndex"
-              :width="col.width"
-              :fixed="col.fixed"
-              :ellipsis="col.ellipsis"
-              :sortable="col.sortable"
-              v-bind="col"
-            >
+          <template v-for="col in safeColumns" :key="col.dataIndex || col.slotName">
+            <a-table-column v-bind="col">
               <template #cell="{ record, rowIndex }">
                 <!-- 优先使用插槽：column-{dataIndex} -->
                 <slot
@@ -326,10 +318,6 @@ function calcIndex(rowIndex: number): number {
   background: var(--color-fill-1);
   font-weight: 600;
   color: var(--color-text-1);
-}
-
-.pro-table-arco :deep(.arco-table-tr) {
-  /* 行间微弱的 hover 效果 */
 }
 
 .pro-table-arco :deep(.arco-table-td) {

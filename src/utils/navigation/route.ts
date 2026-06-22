@@ -83,3 +83,39 @@ export const getFirstMenuPath = (menuList: AppRouteRecord[]): string => {
 
   return ''
 }
+
+/**
+ * 递归按 path 查找菜单项
+ * @param list 菜单列表
+ * @param path 要查找的路径
+ * @returns 匹配的菜单项，未找到返回 null
+ */
+export function findMenuItem(list: AppRouteRecord[], path: string): AppRouteRecord | null {
+  for (const item of list) {
+    if (item.path === path) return item
+    if (item.children) {
+      const found = findMenuItem(item.children, path)
+      if (found) return found
+    }
+  }
+  return null
+}
+
+/**
+ * 递归查找目标路径的所有父级路径
+ * @param list 菜单列表
+ * @param target 目标路径
+ * @returns 父级路径数组，从顶层到直接父级
+ */
+export function findParentPaths(list: AppRouteRecord[], target: string): string[] {
+  for (const item of list) {
+    if (item.children?.length) {
+      if (item.children.some((c) => target.startsWith(c.path || '') || target === c.path)) {
+        return [item.path || '']
+      }
+      const found = findParentPaths(item.children, target)
+      if (found.length) return [item.path || '', ...found]
+    }
+  }
+  return []
+}

@@ -31,6 +31,7 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { findMenuItem } from '@/utils/navigation/route'
 import type { AppRouteRecord } from '@/types/router'
 import ZhaoIcon from '@/components/icons/ZhaoIcon.vue'
 
@@ -50,18 +51,7 @@ const { t } = useI18n()
 const selectedKeys = computed(() => [route.path])
 
 const onClick = (key: string) => {
-  const item = findItem(props.menuList, key)
+  const item = findMenuItem(props.menuList, key)
   if (item) emit('select', item)
-}
-
-function findItem(list: AppRouteRecord[], path: string): AppRouteRecord | null {
-  for (const item of list) {
-    if (item.path === path) return item
-    if (item.children) {
-      const found = findItem(item.children, path)
-      if (found) return found
-    }
-  }
-  return null
 }
 </script>

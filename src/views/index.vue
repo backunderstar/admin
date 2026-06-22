@@ -1,12 +1,12 @@
 ﻿<template>
-  <div class="flex h-screen w-full overflow-hidden bg-[var(--color-bg-1)]">
+  <div class="flex h-screen w-full overflow-hidden bg-(--color-fill-2)">
     <!-- ═══════════════════════════════════════════
        侧边栏
      ═══════════════════════════════════════════ -->
     <aside
       v-if="showSidebar"
       id="app-sidebar"
-      class="relative flex-shrink-0 h-screen overflow-hidden z-20 select-none"
+      class="relative shrink-0 h-full overflow-hidden z-20 select-none rounded-lg"
       :style="{ width: sidebarWidth }"
     >
       <!-- 双列模式 -->
@@ -14,11 +14,11 @@
         <div class="flex h-full">
           <!-- 左栏：一级图标 -->
           <div
-            class="w-16 flex flex-col items-center py-3 border-r border-[var(--color-border)]"
+            class="w-16 flex flex-col items-center py-3 border-r border-(--color-border)"
             :style="{ background: getMenuTheme.background }"
           >
             <div
-              class="w-9 h-9 rounded-lg flex items-center justify-center cursor-pointer flex-shrink-0"
+              class="w-9 h-9 rounded-lg flex items-center justify-center cursor-pointer shrink-0"
               :style="{ background: 'var(--theme-color, #5d87ff)' }"
             >
               <ZhaoIcon icon="ri:admin-line" class="text-white text-lg" />
@@ -34,8 +34,8 @@
                   class="flex flex-col items-center py-2.5 mx-1.5 rounded-lg cursor-pointer transition-colors"
                   :class="
                     activeFirstLevel === item.path
-                      ? 'text-[var(--color-primary-light-4)] bg-[var(--color-fill-2)]'
-                      : 'text-[var(--color-text-3)] hover:text-[var(--color-text-2)] hover:bg-[var(--color-fill-1)]'
+                      ? 'text-(--color-primary-light-4) bg-(--color-fill-2)'
+                      : 'text-(--color-text-3) hover:text-(--color-text-2) hover:bg-(--color-fill-1)'
                   "
                   @click="setActiveFirstLevel(item)"
                 >
@@ -68,23 +68,23 @@
       <!-- 标准侧边栏 -->
       <template v-else>
         <div
-          class="flex flex-col h-full border-r border-[var(--color-border)]"
+          class="flex flex-col h-full border-r border-(--color-border)"
           :style="{ background: getMenuTheme.background }"
         >
           <!-- Logo -->
           <div
-            class="flex items-center justify-center h-16 flex-shrink-0 cursor-pointer"
+            class="flex items-center justify-center h-16 shrink-0 cursor-pointer"
             @click="goHome"
           >
             <div
-              class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+              class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
               :style="{ background: 'var(--theme-color, #5d87ff)' }"
             >
               <ZhaoIcon icon="ri:admin-line" class="text-white text-base" />
             </div>
             <span
               class="text-base font-bold whitespace-nowrap overflow-hidden transition-all duration-250"
-              :class="menuOpen ? 'max-w-[200px] opacity-100 ml-3' : 'max-w-0 opacity-0 ml-0'"
+              :class="menuOpen ? 'max-w-50 opacity-100 ml-3' : 'max-w-0 opacity-0 ml-0'"
               :style="{ color: getMenuTheme.systemNameColor }"
             >
               {{ systemInfo.name }}
@@ -110,7 +110,7 @@
           </div>
           <!-- 折叠按钮 -->
           <div
-            class="flex-shrink-0 h-10 flex items-center justify-center cursor-pointer border-t border-[var(--color-border)] text-[var(--color-text-3)] hover:text-[var(--color-text-1)] transition-colors"
+            class="shrink-0 h-10 flex items-center justify-center cursor-pointer border-t border-(--color-border) text-(--color-text-3) hover:text-(--color-text-1) transition-colors"
             :style="{ background: getMenuTheme.background }"
             @click="settingStore.setMenuOpen(!menuOpen)"
           >
@@ -128,12 +128,12 @@
      ═══════════════════════════════════════════ -->
     <main
       id="app-main"
-      class="flex-1 flex flex-col h-screen min-w-0 overflow-hidden bg-[var(--color-fill-2)]"
+      class="flex-1 flex flex-col h-full min-w-0 overflow-hidden bg-(--color-fill-2)"
     >
       <!-- 顶部栏 -->
       <div
         id="app-header"
-        class="flex-shrink-0 sticky top-0 z-10 bg-[var(--color-bg-1)] border-b border-[var(--color-border)]"
+        class="shrink-0 sticky top-0 z-10 bg-(--color-bg-1) border-b border-(--color-border)"
       >
         <ZhaoHeaderBar @toggle-menu="toggleMenu" />
       </div>
@@ -176,6 +176,7 @@ import ZhaoHeaderBar from '@/components/layouts/zhao-header-bar/index.vue'
 import ZhaoPageContent from '@/components/layouts/zhao-page-content/index.vue'
 import ZhaoGlobalComponent from '@/components/layouts/zhao-global-component/index.vue'
 import type { AppRouteRecord } from '@/types/router'
+import { findMenuItem, findParentPaths } from '@/utils/navigation/route'
 import ZhaoIcon from '@/components/icons/ZhaoIcon.vue'
 
 defineOptions({ name: 'AppLayout' })
@@ -210,19 +211,6 @@ const sidebarWidth = computed(() => {
 
 // ── 展开的菜单（路由变化时自动展开对应父级） ──
 const openKeys = ref<string[]>([])
-
-const findParentPaths = (list: AppRouteRecord[], target: string): string[] => {
-  for (const item of list) {
-    if (item.children?.length) {
-      if (item.children.some((c) => target.startsWith(c.path || '') || target === c.path)) {
-        return [item.path || '']
-      }
-      const found = findParentPaths(item.children, target)
-      if (found.length) return [item.path || '', ...found]
-    }
-  }
-  return []
-}
 
 // 路由变化时，确保当前路由的父级始终展开
 watch(
@@ -278,18 +266,6 @@ const onMenuItemClick = (key: string) => {
     fixedTab: item.meta?.fixedTab ?? false,
   })
   closeMobileSidebar()
-}
-
-// ── 递归查找 ──
-function findMenuItem(list: AppRouteRecord[], path: string): AppRouteRecord | null {
-  for (const item of list) {
-    if (item.path === path) return item
-    if (item.children) {
-      const found = findMenuItem(item.children, path)
-      if (found) return found
-    }
-  }
-  return null
 }
 
 // ── 首页跳转 ──

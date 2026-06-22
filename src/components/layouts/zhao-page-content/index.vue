@@ -16,11 +16,6 @@
           <component :is="Comp" v-if="Comp && !(route as any).meta?.keepAlive" :key="route.path" />
         </Transition>
       </RouterView>
-
-      <!-- 加载中占位 -->
-      <div v-if="false" class="absolute inset-0 flex items-center justify-center">
-        <a-spin />
-      </div>
     </div>
   </div>
 </template>

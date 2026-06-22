@@ -60,34 +60,11 @@
     </div>
 
     <!-- 右键菜单 -->
-    <Teleport to="body">
-      <div
-        v-if="contextMenuVisible"
-        class="context-menu"
-        :style="{ left: `${contextMenuPos.x}px`, top: `${contextMenuPos.y}px` }"
-      >
-        <div class="context-menu-item" @click="onContextMenuAction('refresh')">
-          <ZhaoIcon icon="ri:refresh-line" class="mr-2" />
-          {{ t('worktab.btn.refresh') }}
-        </div>
-        <div class="context-menu-item" @click="onContextMenuAction('closeLeft')">
-          <ZhaoIcon icon="ri:arrow-left-s-line" class="mr-2" />
-          {{ t('worktab.btn.closeLeft') }}
-        </div>
-        <div class="context-menu-item" @click="onContextMenuAction('closeRight')">
-          <ZhaoIcon icon="ri:arrow-right-s-line" class="mr-2" />
-          {{ t('worktab.btn.closeRight') }}
-        </div>
-        <div class="context-menu-item" @click="onContextMenuAction('closeOther')">
-          <ZhaoIcon icon="ri:subtract-line" class="mr-2" />
-          {{ t('worktab.btn.closeOther') }}
-        </div>
-        <div class="context-menu-item" @click="onContextMenuAction('closeAll')">
-          <ZhaoIcon icon="ri:close-circle-line" class="mr-2" />
-          {{ t('worktab.btn.closeAll') }}
-        </div>
-      </div>
-    </Teleport>
+    <WorkTabContextMenu
+      :visible="contextMenuVisible"
+      :position="contextMenuPos"
+      @action="onContextMenuAction"
+    />
   </div>
 </template>
 
@@ -99,6 +76,7 @@ import { useWorktabStore } from '@/store/modules/worktab'
 import { useCommon } from '@/hooks/core/useCommon'
 import type { WorkTab } from '@/types'
 import ZhaoIcon from '@/components/icons/ZhaoIcon.vue'
+import WorkTabContextMenu from './context-menu.vue'
 
 defineOptions({ name: 'ZhaoWorkTab' })
 
@@ -251,35 +229,5 @@ const onContextMenuAction = (value: string | number | Record<string, any> | unde
 
 .scrollbar-none::-webkit-scrollbar {
   display: none;
-}
-</style>
-
-<style>
-.context-menu {
-  position: fixed;
-  z-index: 1000;
-  min-width: 140px;
-  padding: 4px 0;
-  background: var(--color-bg-popup);
-  border: 1px solid var(--color-border);
-  border-radius: 6px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-}
-
-.context-menu-item {
-  display: flex;
-  align-items: center;
-  padding: 7px 12px;
-  font-size: 13px;
-  color: var(--color-text-2);
-  cursor: pointer;
-  transition:
-    background 0.15s,
-    color 0.15s;
-}
-
-.context-menu-item:hover {
-  background: var(--color-fill-2);
-  color: var(--color-text-1);
 }
 </style>
